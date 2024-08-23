@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <div class="container px-4 py-5" id="featured-3" dir="rtl">
+    <h2 class="pb-2 border-bottom">پنل</h2>
+    <!-- Flash messages for feedback -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert alert-info" role="alert">
+          {% for message in messages %}
+              {{ message }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+      {% if session['permission'] | int == 3 %}
+      <div class="feature col">
+        <h3 class="fs-2 text-body-emphasis">ثبت نام</h3>
+        <form action="" method="POST">
+          <p>ثبت نام کاربر جدید</p>
+          {{ form.hidden_tag() }}
+          {{ form.username() }}
+          {{ form.password() }}
+          {{ form.repassword() }}
+          {{ form.regselectpermission() }}
+          {{ form.register() }}
+        </form>
+      </div>
+      <div class="feature col">
+        <h3 class="fs-2 text-body-emphasis">دسترسی</h3>
+        <form action="" method="POST">
+          <p>برای تغییر سطح دسترسی کاربران</p>
+          {{ form.hidden_tag() }}
+          {{ form.selectuser() }}
+          {{ form.selectpermission() }}
+          {{ form.changepermission() }}
+        </form>
+      </div>
+      <div class="feature col">
+        <h3 class="fs-2 text-body-emphasis">تنظیمات</h3>
+        <form action="" method="POST">
+          <p>برای پاک کردن لاگ ها در فایل لاگ</p>
+          {{ form.hidden_tag() }}
+          {{ form.clearlog() }}
+        </form>
+        <h3 class="fs-2 text-body-emphasis">ری استارت</h3>
+        <form action="" method="POST">
+          <p>در مواقع ضروری استفاده شود</p>
+          {{ form.hidden_tag() }}
+          {{ form.restartcore() }}
+        </form>
+      </div>
+      <div class="feature col">
+        <h3 class="fs-2 text-body-emphasis">پاک کردن یوزر</h3>
+        <form action="" method="POST">
+          <p>پاک کردن نام کربری و دقت داشته باشد بعد از پاک کردن کاربر سرور ری استارت میشود</p>
+          {{ form.hidden_tag() }}
+          {{ form.selectuserdelete() }}
+          {{ form.deleteusername() }}
+        </form>
+      </div>
+    {% endif %}
+      <div class="feature col">
+        <h3 class="fs-2 text-body-emphasis">تغییر رمز عبور</h3>
+        <form action="" method="POST">
+          <p></p>
+          {{ form.hidden_tag() }}
+          {{ form.oldpassword() }}
+          {{ form.newpassword() }}
+          {{ form.renewpassword() }}
+          {{ form.changepassword() }}
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

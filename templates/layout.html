@@ -1,0 +1,29 @@
+﻿<html lang="fa" dir="rtl">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" media="all" href="{{ url_for('style', filename='css/style.css')}}"/>
+        <script src="{{ url_for('style', filename='js/jquery.js')}}"></script>
+        <script src="{{ url_for('style', filename='js/gallery.js')}}"></script>
+        
+        <title>آراکس</title>
+    </head>
+    <body>
+        {% if "username" in session %}
+            <div class="navigation">
+                <div class="right-side">
+                    <img src="{{ url_for('style', filename='img/logo.png')}}" alt="لوگو" class="logo">
+                    <nav class="nav">
+                        <a href="/" class="{% if request.endpoint == 'dir_listing' %}active{% else %}{% endif %}">صفحه اصلی</a>
+                        <a href="/search" class="{% if request.endpoint == 'search' %}active{% else %}{% endif %}">جستوجو</a>
+                        <a href="/log" class="{% if request.endpoint == 'log' %}active{% else %}{% endif %}">لاگ</a>
+                    </nav>
+                </div>
+                <div class="left-side">
+                    <a href="/panel" class="user-panel {% if request.endpoint == 'panel' %}active{% else %}{% endif %}" >پنل کاربری</a>
+                    <a href="/logout" class="logout">خروج</a>
+                </div>
+            </div>
+        {% endif %}
+        {% block content %} {% endblock %}
+    </body>
+</html>

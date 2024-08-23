@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="error">
+        <img src="{{ url_for('style', filename='img/404.png')}}"/>
+        <h1>{{ titlemsg }}</h1>
+        <p>{{ detailmsg }}</p>
+    </div>
+{% endblock content %}
