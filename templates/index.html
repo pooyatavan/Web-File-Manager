@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="control">
+        <!-- open modal -->
+        <div id="demo-modal" class="modal">
+            <div class="modal__content">
+                <h1>تغییر نام پوشه</h1>
+                <form action="" method="POST">
+                    {{ form.hidden_tag() }}
+                    {{ form.getname() }}
+                    {{ form.submitname() }}
+                </form>
+                <a href="#" class="modal__close">&times;</a>
+            </div>
+        </div>
+
+        <div class="control-right">
+            {% if session['permission'] | int >= 2 %}
+            <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" class="form">
+                <input type="hidden" name="path" value="{{ current_path }}">
+                <label for="file-upload" class="custom-file-upload">انتخاب</label>
+                <input id="file-upload" type="file" name="file" accept="image/*" multiple style="display: none;">
+                <span id="file-count">فایلی انتخاب نشده است</span>
+                <input type="text" name="file_name" placeholder="نام فایل">
+                <button type="submit" class="btn">آپلود</button>
+            </form>
+                <form class="form" action="{{ url_for('new_folder') }}" method="post">
+                    <input type="hidden" name="path" value="{{ current_path }}">
+                    <input type="text" name="folder_name" placeholder="نام پوشه" style="text-align: right;">
+                    <button type="submit" class="btn">پوشه جدید</button>
+                </form>
+            {% endif %}
+        </div>
+        <!-- FYI -->
+        <div class="control-left">
+            <form class="form">
+                <a href="javascript: history.go(-1)" class="btn-back">برگشت</a>
+                <h5>{{ current_path }}</h5>
+                <a href="#demo-modal" class="btn">تغییر نام پوشه</a>
+            </form>
+        </div>
+    </div>
+    <!-- File and folder listing -->
+    <div class="container-explor">
+        <!-- Flash messages for feedback -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert" role="alert">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <!-- Files and folder -->
+        <div class="list-group" dir="ltr">
+            {% if not files %}
+                <div class="empty">
+                    <img src="{{ url_for('style', filename='img/empty.png')}}"><br>
+                    <a>فایل یا پوشه ای موجود نمی باشد</a>
+                </div>
+            {% else %}
+                <div class="gallery">
+                    {% for file in files %}
+                        {% if "thumb" not in file %}
+                            <div class="img-container">
+                                {% if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif')) %}
+                                    {% if current_path == '' %}
+                                        <div class="gallery-item">
+                                            <img src="{{ url_for('static', filename='' ~ current_path ~ '' ~ 'thumb_' + file) }}" data-src="{{ url_for('static', filename='' ~ current_path ~ '' + file) }}" data-image="{{ url_for('static', filename='' ~ current_path ~ '' + file) }}" alt="{{ file }}">
+                                        </div>
+                                        <div class="item-desc">
+                                            <a href="{{ url_for('static', filename='' ~ current_path ~ '' ~ file) }}">{{ file }}</a>
+                                        </div>
+                                    {% else %}
+                                        <div class="gallery-item">
+                                            <img src="{{ url_for('static', filename='' ~ current_path ~ '/' ~ 'thumb_' + file) }}" data-src="{{ url_for('static', filename='' ~ current_path~ '/' ~ file) }}" data-image="{{ url_for('static', filename='' ~ current_path~ '/' ~ file) }}" alt="{{ file }}">>
+                                        </div>
+                                        <div class="item-desc">
+                                            <a href="{{ url_for('static', filename='' ~ current_path ~ '/' ~ file) }}">{{ file }}</a>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <a href="{{ url_for('dir_listing', req_path=current_path + '/' + file) }}">
+                                        <img src="{{ url_for('style', filename='img/folder.png') }}" alt="{{ file }}" style="max-height: 150px;">
+                                        <div class="images-cont">{{ file }}</div>
+                                    </a>
+                                {% endif %}
+                                <form class="form" action="{{ url_for('delete_file') }}" method="post">
+                                    <input type="hidden" name="path" value="{{ current_path }}">
+                                    <input type="hidden" name="file_name" value="{{ file }}">
+                                    {% if session['permission'] | int >= 2 %}
+                                        <button type="submit" class="btn-remove">حذف</button>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('style', filename='js/file.js')}}"></script>
+{% endblock content %}
