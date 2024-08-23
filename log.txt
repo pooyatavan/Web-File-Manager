@@ -1,0 +1,154 @@
+[INF] 20/08/2024 22:59:48 Log.txt file hase been cleaned by admin 
+[INF] 20/08/2024 23:15:51 Connected to MySQL Server 192.168.100.94 
+[INF] 20/08/2024 23:15:51 Loaded 3 from users in 0.0 second(s) 
+[INF] 20/08/2024 23:15:51 Server local ip address is 192.168.3.20 
+[INF] 20/08/2024 23:15:51 Server is running on 192.168.3.20:80 
+[INF] 20/08/2024 23:15:51 User admin search for word: tes 
+[INF] 20/08/2024 23:15:51 User admin search for word: tes 
+[INF] 20/08/2024 23:15:51 User admin search for word: tes 
+[INF] 20/08/2024 23:15:51 User admin search for word: tes 
+[INF] 20/08/2024 23:15:51 User admin search for word: tes 
+[INF] 20/08/2024 23:15:51 User admin search for word: tes 
+[INF] 20/08/2024 23:15:51 User admin search for word: tes 
+[INF] 20/08/2024 23:15:51 User admin search for word: tes 
+[INF] 20/08/2024 23:15:51 User admin search for word: tes 
+[INF] 20/08/2024 23:15:51 User admin search for word: tes 
+[INF] 20/08/2024 23:15:51 User admin search for word: tes 
+[INF] 20/08/2024 23:15:51 User admin search for word: tes 
+[INF] 20/08/2024 23:15:51 User admin search for word: tes 
+[INF] 20/08/2024 23:15:51 User admin search for word: tes 
+[INF] 21/08/2024 10:15:24 Connected to MySQL Server 192.168.100.94 
+[INF] 21/08/2024 10:15:24 Loaded 3 from users in 0.01 second(s) 
+[INF] 21/08/2024 10:15:24 Server local ip address is 192.168.3.20 
+[INF] 21/08/2024 10:15:24 Server is running on 192.168.3.20:80 
+[DEB] 21/08/2024 10:15:24 Account admin loged in 
+[INF] 21/08/2024 10:15:24 User admin rename folder from gggg to gggg 
+[INF] 21/08/2024 10:15:24 User admin delete folder:  
+[INF] 21/08/2024 10:15:24 User admin make new folder: test 
+[INF] 21/08/2024 10:47:28 Connected to MySQL Server 192.168.100.94 
+[INF] 21/08/2024 10:47:28 Loaded 3 from users in 0.0 second(s) 
+[INF] 21/08/2024 10:47:28 Server local ip address is 192.168.3.20 
+[INF] 21/08/2024 10:47:28 Server is running on 192.168.3.20:80 
+[INF] 21/08/2024 10:47:28 User admin delete file: test_(0).png 
+[INF] 21/08/2024 10:47:28 User admin search for word: tes 
+[INF] 21/08/2024 10:47:28 User admin search for word: po 
+[INF] 21/08/2024 10:47:28 User admin search for word: pooya 
+[INF] 21/08/2024 10:47:28 User admin search for word: test 
+[INF] 21/08/2024 10:47:28 User admin make new folder: amini 
+[INF] 21/08/2024 11:44:11 Connected to MySQL Server 192.168.100.94 
+[INF] 21/08/2024 11:44:11 Loaded 3 from users in 0.0 second(s) 
+[INF] 21/08/2024 11:44:11 Server local ip address is 192.168.3.20 
+[INF] 21/08/2024 11:44:11 Server is running on 192.168.3.20:80 
+[INF] 21/08/2024 16:18:40 Connected to MySQL Server 192.168.100.94 
+[INF] 21/08/2024 16:18:40 Loaded 3 from users in 0.04 second(s) 
+[INF] 21/08/2024 16:18:40 Server local ip address is 192.168.3.20 
+[INF] 21/08/2024 16:18:40 Server is running on 192.168.3.20:80 
+[DEB] 21/08/2024 16:18:40 Account admin loged in 
+[INF] 21/08/2024 16:18:40 User admin search for word: tes 
+[INF] 21/08/2024 16:18:40 User admin search for word: test 
+[INF] 21/08/2024 16:18:40 User admin search for word: po 
+[INF] 21/08/2024 16:18:40 User admin search for word: po 
+[INF] 22/08/2024 22:22:48 Connected to MySQL Server 192.168.100.94 
+[INF] 22/08/2024 22:22:48 Loaded 3 from users in 0.03 second(s) 
+[INF] 22/08/2024 22:22:48 Server local ip address is 192.168.3.20 
+[INF] 22/08/2024 22:22:48 Server is running on 192.168.3.20:80 
+[DEB] 22/08/2024 22:22:48 Account admin loged in 
+[INF] 22/08/2024 22:30:40 Connected to MySQL Server 192.168.100.94 
+[INF] 22/08/2024 22:30:40 Loaded 3 from users in 0.0 second(s) 
+[INF] 22/08/2024 22:30:40 Server local ip address is 192.168.3.20 
+[INF] 22/08/2024 22:30:40 Server is running on 192.168.3.20:80 
+[INF] 22/08/2024 22:32:46 Connected to MySQL Server 192.168.100.94 
+[INF] 22/08/2024 22:32:46 Loaded 3 from users in 0.0 second(s) 
+[INF] 22/08/2024 22:32:46 Server local ip address is 192.168.3.20 
+[INF] 22/08/2024 22:32:46 Server is running on 192.168.3.20:80 
+[INF] 22/08/2024 22:33:14 Connected to MySQL Server 192.168.100.94 
+[INF] 22/08/2024 22:33:14 Loaded 3 from users in 0.0 second(s) 
+[INF] 22/08/2024 22:33:14 Server local ip address is 192.168.3.20 
+[INF] 22/08/2024 22:33:14 Server is running on 192.168.3.20:80 
+[INF] 22/08/2024 22:35:53 Connected to MySQL Server 192.168.100.94 
+[INF] 22/08/2024 22:35:53 Loaded 3 from users in 0.0 second(s) 
+[INF] 22/08/2024 22:36:36 Connected to MySQL Server 192.168.100.94 
+[INF] 22/08/2024 22:36:36 Loaded 3 from users in 0.0 second(s) 
+[INF] 22/08/2024 22:36:55 Connected to MySQL Server 192.168.100.94 
+[INF] 22/08/2024 22:36:55 Loaded 3 from users in 0.0 second(s) 
+[INF] 22/08/2024 22:37:35 Connected to MySQL Server 192.168.100.94 
+[INF] 22/08/2024 22:37:35 Loaded 3 from users in 0.0 second(s) 
+[INF] 23/08/2024 07:05:11 Connected to MySQL Server 192.168.100.94 
+[INF] 23/08/2024 07:05:11 Loaded 3 from users in 0.0 second(s) 
+[INF] 23/08/2024 07:05:11 Server local ip address is 192.168.3.20 
+[INF] 23/08/2024 07:05:11 Server is running on 192.168.3.20:80 
+[DEB] 23/08/2024 07:05:11 Account admin loged in 
+[DEB] 23/08/2024 07:05:11 Account admin logout 
+[INF] 23/08/2024 11:42:44 Connected to MySQL Server 192.168.100.94 
+[INF] 23/08/2024 11:42:44 Loaded 3 from users in 0.0 second(s) 
+[INF] 23/08/2024 11:42:44 Server local ip address is 192.168.3.20 
+[INF] 23/08/2024 11:42:44 Server is running on 192.168.3.20:80 
+[DEB] 23/08/2024 11:42:44 Account admin loged in 
+[INF] 23/08/2024 11:56:56 Connected to MySQL Server 192.168.100.94 
+[INF] 23/08/2024 11:56:56 Loaded 3 from users in 0.0 second(s) 
+[INF] 23/08/2024 11:56:56 Server local ip address is 192.168.3.20 
+[INF] 23/08/2024 11:56:56 Server is running on 192.168.3.20:80 
+[INF] 23/08/2024 22:32:04 Connected to MySQL Server 192.168.100.94 
+[INF] 23/08/2024 22:32:04 Loaded 3 from users in 0.0 second(s) 
+[INF] 23/08/2024 22:32:04 Server local ip address is 127.0.0.1 
+[INF] 23/08/2024 22:32:04 Server is running on 127.0.0.1:80 
+[INF] 23/08/2024 22:33:26 Connected to MySQL Server 192.168.100.94 
+[INF] 23/08/2024 22:33:26 Loaded 3 from users in 0.0 second(s) 
+[INF] 23/08/2024 22:33:26 Server local ip address is 192.168.3.20 
+[INF] 23/08/2024 22:33:26 Server is running on 192.168.3.20:80 
+[INF] 23/08/2024 22:36:46 Connected to MySQL Server 192.168.100.94 
+[INF] 23/08/2024 22:36:46 Loaded 3 from users in 0.0 second(s) 
+[INF] 23/08/2024 22:36:46 Server local ip address is 192.168.3.20 
+[INF] 23/08/2024 22:36:46 Server is running on 192.168.3.20:80 
+[INF] 23/08/2024 22:37:16 Connected to MySQL Server 192.168.100.94 
+[INF] 23/08/2024 22:37:16 Loaded 3 from users in 0.0 second(s) 
+[INF] 23/08/2024 22:37:16 Server local ip address is 192.168.3.20 
+[INF] 23/08/2024 22:37:16 Server is running on 192.168.3.20:80 
+[INF] 23/08/2024 22:40:25 Connected to MySQL Server 192.168.100.94 
+[INF] 23/08/2024 22:40:25 Loaded 3 from users in 0.0 second(s) 
+[INF] 23/08/2024 22:40:25 Server local ip address is 192.168.3.20 
+[INF] 23/08/2024 22:40:25 Server is running on 192.168.3.20:80 
+[INF] 23/08/2024 22:52:04 Connected to MySQL Server 192.168.100.94 
+[INF] 23/08/2024 22:52:04 Loaded 3 from users in 0.0 second(s) 
+[INF] 23/08/2024 22:52:04 Server local ip address is 192.168.3.20 
+[INF] 23/08/2024 22:52:04 Server is running on 192.168.3.20:80 
+[INF] 23/08/2024 22:52:04 User admin delete file: pooys_(0).png 
+[INF] 23/08/2024 22:52:04 User admin delete file: pooys_(1).png 
+[INF] 23/08/2024 22:52:04 User admin delete file: pooys_(2).png 
+[INF] 23/08/2024 22:52:04 User admin delete file: pooys_(3).png 
+[INF] 23/08/2024 23:14:45 Connected to MySQL Server 192.168.100.94 
+[INF] 23/08/2024 23:14:45 Loaded 3 from users in 0.0 second(s) 
+[INF] 23/08/2024 23:14:45 Server local ip address is 192.168.3.20 
+[INF] 23/08/2024 23:14:45 Server is running on 192.168.3.20:80 
+[INF] 23/08/2024 23:17:13 Connected to MySQL Server 192.168.100.94 
+[INF] 23/08/2024 23:17:13 Loaded 3 from users in 0.0 second(s) 
+[INF] 23/08/2024 23:17:13 Server local ip address is 192.168.3.20 
+[INF] 23/08/2024 23:17:13 Server is running on 192.168.3.20:80 
+[INF] 24/08/2024 01:40:37 Connected to MySQL Server 192.168.100.94 
+[INF] 24/08/2024 01:40:37 Loaded 3 from users in 0.0 second(s) 
+[INF] 24/08/2024 01:40:37 Server local ip address is 192.168.3.20 
+[INF] 24/08/2024 01:40:37 Server is running on 192.168.3.20:80 
+[DEB] 24/08/2024 01:40:37 Account admin loged in 
+[INF] 24/08/2024 01:40:37 User admin delete file: amini_(0).png 
+[INF] 24/08/2024 01:40:37 User admin delete file: amini_(1).png 
+[INF] 24/08/2024 01:40:37 User admin delete file: amini_(2).png 
+[INF] 24/08/2024 01:40:37 User admin delete file: amini_(3).png 
+[INF] 24/08/2024 01:40:37 User admin delete file: amini_(4).png 
+[INF] 24/08/2024 01:40:37 User admin delete file: amini_(5).png 
+[INF] 24/08/2024 01:40:37 User admin delete file: pooys_(0).png 
+[INF] 24/08/2024 01:40:37 User admin delete file: pooys_(1).png 
+[INF] 24/08/2024 01:40:37 User admin delete file: pooys_(2).png 
+[INF] 24/08/2024 01:40:37 User admin delete file: pooys_(3).png 
+[INF] 24/08/2024 01:40:37 User admin delete file: pooys_(4).png 
+[INF] 24/08/2024 01:40:37 User admin delete file: pooys_(5).png 
+[INF] 24/08/2024 01:40:37 User admin delete file: po_(1).png 
+[INF] 24/08/2024 01:40:37 User admin delete file: po_(0).png 
+[INF] 24/08/2024 01:46:14 Connected to MySQL Server 192.168.100.94 
+[INF] 24/08/2024 01:46:14 Loaded 3 from users in 0.0 second(s) 
+[INF] 24/08/2024 01:46:14 Server local ip address is 192.168.3.20 
+[INF] 24/08/2024 01:46:14 Server is running on 192.168.3.20:80 
+[INF] 24/08/2024 01:46:14 admin change permission for test to 1 
+[DEB] 24/08/2024 01:46:14 Account admin logout 
+[DEB] 24/08/2024 01:46:14 Account test loged in 
+[DEB] 24/08/2024 01:46:14 Account test logout 
+[DEB] 24/08/2024 01:46:14 Account admin loged in 
