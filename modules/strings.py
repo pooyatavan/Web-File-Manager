@@ -61,6 +61,8 @@ class Console(enum.Enum):
     UserMakeFolder = 'User {username} make new folder: {name}'
     UsernameRenameFolder = 'User {username} rename folder from {old} to {new}'
     CompressError = 'Error while convert photo'
+    DirFolder = 'name "dir" folder not exist in root'
+    NewFolderError = 'error while making a new folder for user {username}'
 
 class Objects(enum.Enum):
     Search = 'جستجو'
@@ -80,8 +82,11 @@ class Objects(enum.Enum):
     OldPass = 'رمز عبور فعلی'
     NewPass = 'رمز عبور جدید'
     ReNewPass = 'تکرار رمز عبور جدید'
-    ChangeName = 'نام پوشه'
+    FolderName = 'نام پوشه'
     SubmitChangeName = 'تغییر نام'
+    NewFolder = 'پوشه جدید'
+    ChooseFile = 'انتخاب فایل'
+    FilesName = 'اسم فایل'
 
 class SelectUser(enum.Enum):
     choose = 'انتخاب'

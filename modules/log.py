@@ -35,3 +35,4 @@ class log:
         print(figlet_format("Araax", font="standard", width=300))
 
 LOG = log()
+LOG.logo()

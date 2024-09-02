@@ -22,3 +22,9 @@ def GetRootProject():
 
 def GetTime():
     return jdatetime.datetime.fromtimestamp(datetime.timestamp(datetime.now().replace(microsecond=0)))
+
+def RemoveIP():
+    return "http://" + socket.gethostbyname(socket.gethostname()) + "/"
+
+def RandomKey():
+    return str(os.urandom(12).hex)
