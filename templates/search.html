@@ -33,22 +33,18 @@
             {% for file in files %}
                 <div class="search-res">
                     {% if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif')) %}
-                        <div class="search-res-left">
-                            <img src="{{ current_path }}" alt="{{ file }}">
-                        </div>
-                        <div class="search-res-right">
-                            <a href="{{ 'dir/' + file }}">{{ file }}</a>
-                        </div>
+                        <div class="search-res-left"><img src="{{ current_path }}"></div>
+                        <div class="search-res-right"><a class="download" href="{{ 'dir/' + file }}">دانلود</a></div>
+                        <div class="search-res-right"><a class="file-name" href="{{ 'dir/' + file }}">{{ file }}</a></div>
                     {% endif %}
                 </div>
             {% endfor %}
             <!-- search for folder -->
             {% for folder in folders %}
-                <div class="list-group-item d-flex justify-content-between align-items-center">
-                    <a href="{{ url_for('dir_listing', req_path=current_path + '/' + folder) }}">
-                        <img src="{{ url_for('style', filename='folder.png') }}" alt="{{ folder }}" style="max-height: 100px;">
-                        <a href="{{ folder }}">{{ folder }}</a>
-                    </a>
+                <div class="search-res">
+                    <div class="search-res-left"><img src="{{ url_for('style', filename='img/folder.png') }}"></div>
+                    <div class="search-res-right"><a class="folder" href="{{ folder }}">به مسیر</a></div>
+                    <div class="search-res-right"><a class="file-name" href="{{ folder }}">{{ folder }}</a></div>
             {% endfor %}
         {% endif %}
     </div>
