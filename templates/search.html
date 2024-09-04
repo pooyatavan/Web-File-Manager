@@ -33,7 +33,7 @@
             {% for file in files %}
                 <div class="search-res">
                     {% if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif')) %}
-                        <div class="search-res-left"><img src="{{ current_path }}"></div>
+                        <div class="search-res-left"><img src="{{ 'dir/' + file }}"></div>
                         <div class="search-res-right"><a class="download" href="{{ 'dir/' + file }}">دانلود</a></div>
                         <div class="search-res-right"><a class="file-name" href="{{ 'dir/' + file }}">{{ file }}</a></div>
                     {% endif %}

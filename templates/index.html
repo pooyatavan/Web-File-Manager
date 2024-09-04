@@ -66,14 +66,14 @@
                                 {% if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif')) %}
                                     {% if current_path == '' %}
                                         <div class="gallery-item">
-                                            <img src="{{ url_for('static', filename='' ~ current_path ~ '' ~ 'thumb_' + file) }}" data-src="{{ url_for('static', filename='' ~ current_path ~ '' + file) }}" data-image="{{ url_for('static', filename='' ~ current_path ~ '' + file) }}" alt="{{ file }}">
+                                            <img src="{{ url_for('static', filename='' ~ current_path ~ '' ~ 'thumb_' + file) }}" data-src="{{ url_for('static', filename='' ~ current_path ~ '' + file) }}" data-image="{{ url_for('static', filename='' ~ current_path ~ '' + file) }}" alt="{{ file }}" class="gallery-item gallery-item-image"/>
                                         </div>
                                         <div class="item-desc">
                                             <a href="{{ url_for('static', filename='' ~ current_path ~ '' ~ file) }}">{{ file }}</a>
                                         </div>
                                     {% else %}
                                         <div class="gallery-item">
-                                            <img src="{{ url_for('static', filename='' ~ current_path ~ '/' ~ 'thumb_' + file) }}" data-src="{{ url_for('static', filename='' ~ current_path~ '/' ~ file) }}" data-image="{{ url_for('static', filename='' ~ current_path~ '/' ~ file) }}" alt="{{ file }}">>
+                                            <img src="{{ url_for('static', filename='' ~ current_path ~ '/' ~ 'thumb_' + file) }}" src="{{ url_for('static', filename='' ~ current_path ~ '/' + file) }}" data-image="{{ url_for('static', filename='' ~ current_path~ '/' ~ file) }}" alt="{{ file }}" class="gallery-item gallery-item-image"/>
                                         </div>
                                         <div class="item-desc">
                                             <a href="{{ url_for('static', filename='' ~ current_path ~ '/' ~ file) }}">{{ file }}</a>
@@ -99,5 +99,12 @@
             {% endif %}
         </div>
     </div>
-    <script src="{{ url_for('style', filename='js/file.js')}}"></script>
+    <div id="lightbox" class="lightbox">
+        <span class="close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+        <div id="caption"></div>
+        <a class="next">&#10094;</a>
+        <a class="prev">&#10095;</a>
+    </div>
+    <script src="{{ url_for('style', filename='js/gallery.js')}}"></script>
 {% endblock content %}
