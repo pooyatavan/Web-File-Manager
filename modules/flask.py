@@ -3,13 +3,12 @@ import datetime, os, re
 from wtforms import StringField, SubmitField, SelectField
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from werkzeug.utils import secure_filename
 
 from modules.password import PassGenerate
 from modules.strings import Console,Mess, Objects, SelectUser, SaveLog
 from modules.log import LOG
 from modules.sql import SQL
-from modules.tools import restart, RandomKey, GetRootProject, GetTime, RemoveIP
+from modules.tools import restart, RandomKey, GetTime, RemoveIP
 from modules.image import compress_image
 from modules.config import Config
 
@@ -185,7 +184,7 @@ def FlaskAPP():
                                 LOG.info(Console.UserMakeFolder.value.format(username=session['username'], name=newfoldername))
                                 SQL.InsertLog(len(SQL.ReadLogs()) + 1, GetTime(), session['username'], SaveLog.MakeNewFolder.value, newfoldername)
                             except:
-                                pass
+                                LOG.error(Console.NewFolderError.value.format(username=session['username']))
                         else:
                             flash(Mess.FolderExist.value)
 
@@ -195,20 +194,28 @@ def FlaskAPP():
                         flash(Mess.NotinDir.value)
                         return redirect(url_for('login'))
                     else:
+                        oldname = ""
                         Newname = form.getname.data
                         Renamelist = req_path.split('/')
+                        oldname = Renamelist[0]
                         Renamelist.pop()
                         Renamelist.append(Newname)
                         Fixname = ""
                         for name in Renamelist:
                             Fixname = Fixname + '\\' + name
+                            FD = BASE_DIR + '\\' + req_path.replace('/', '\\'), BASE_DIR + Fixname
                         try:
-                            os.rename(GetRootProject() + f"\\dir\\{req_path.replace('/', '\\')}", BASE_DIR + Fixname)
+                            if os.path.exists(FD[1]) == False:
+                                os.rename(FD[0], FD[1])
+                                LOG.info(Console.UsernameRenameFolder.value.format(username=session['username'], old=oldname, new=Newname))
+                                SQL.InsertLog(len(SQL.ReadLogs()) + 1, GetTime(), session['username'], SaveLog.RenameFolder.value, SaveLog.RenameFolderDetail.value.format(old=oldname, new=Newname))
+                            else:
+                                flash(Mess.FolderExist.value)
                         except:
-                            pass
-                        LOG.info(Console.UsernameRenameFolder.value.format(username=session['username'], old=Renamelist[0], new=Newname))
+                            LOG.error(Console.ErrorRenameFolder.value.format(username=session['username']))
                         return redirect(url_for('login'))
-                
+                    
+                # laod files and folders
                 abs_path = os.path.join(BASE_DIR, req_path)
                 if not os.path.exists(abs_path):
                     return render_template('message.html', titlemsg=Mess.PageNotFoundTitle.value, detailmsg=Mess.PageNotFoundDetail.value)

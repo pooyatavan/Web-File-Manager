@@ -63,6 +63,8 @@ class Console(enum.Enum):
     CompressError = 'Error while convert photo'
     DirFolder = 'name "dir" folder not exist in root'
     NewFolderError = 'error while making a new folder for user {username}'
+    ScanForThumbnail = 'System generate thumbnail for {counter} image fle'
+    ErrorRenameFolder = 'Error while rename folder for user {username}'
 
 class Objects(enum.Enum):
     Search = 'جستجو'
@@ -100,3 +102,5 @@ class SaveLog(enum.Enum):
     DeleteFile = 'حذف کردن فایل'
     DeleteFolder = 'حذف کردن پوشه'
     FileUpload = 'آپلود'
+    RenameFolder = 'تغییر نام پوشه'
+    RenameFolderDetail = 'از {old} به {new}'
