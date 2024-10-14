@@ -26,6 +26,10 @@ if bool(Config.read()['core']['debug']) == True:
 else:
     app.secret_key = RandomKey()
 
+class SIL(FlaskForm):
+    SU = SelectField(render_kw={"class": "form-select"}, choices=usernames)
+    submit = SubmitField(label=Objects.Search.value, render_kw={'class': "btn"})
+
 class LoginForm(FlaskForm):
     username = StringField(render_kw={"placeholder": Objects.username.value, "class": "form-control", "id": "floatingInput", "type": "text"})
     password = StringField(render_kw={"placeholder": Objects.password.value, "class": "form-control","id": "floatingInput", "type": "password"})
@@ -117,6 +121,7 @@ def FlaskAPP():
                             session['username'] = account['username']
                             session['permission'] = account['permission']
                             LOG.debug(Console.LoginSuccess.value.format(username=session["username"]))
+                            SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.LI.value, SaveLog.LogIn.value)
                             return redirect(url_for('dir_listing'))
         else:
             if "username" in session:
@@ -130,6 +135,8 @@ def FlaskAPP():
     @app.route('/<path:req_path>', methods=['POST', 'GET'])
     def dir_listing(req_path):
         form = dir()
+        FS = []
+        FM = []
         if "username" in session:
             if int(session['permission']) == 4:
                  return render_template('message.html', titlemsg=Mess.Warningtitle.value, detailmsg=Mess.AccountLock.value)
@@ -139,15 +146,15 @@ def FlaskAPP():
 
                 # Upload image
                 if form.upload.data == True:
-                    count = 0
+                    count = 1
                     NewFileName = form.filesname.data
                     files = request.files.getlist(form.image.name)
                     if not NewFileName:
                         flash(Mess.FileNameEmpty.value)
                         return redirect(url_for('dir_listing', req_path=req_path))
                     else:
-                        for count_loop, file in enumerate(files):
-                            NFN = NewFileName + f"_({str(count_loop)})" + os.path.splitext(file.filename)[1]
+                        for count_loop, file in enumerate(files, start=1):
+                            NFN = NewFileName + f"_({str(count_loop )})" + os.path.splitext(file.filename)[1]
                             if not URLREQ:
                                 FA = BASE_DIR + "\\" + NFN
                                 FP = BASE_DIR
@@ -167,7 +174,7 @@ def FlaskAPP():
                                             break
                                         else:
                                             count = count + 1
-                        SQL.InsertLog(len(SQL.ReadLogs()) + 1, GetTime(), session['username'], SaveLog.FileUpload.value, str(len(files)))
+                        SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.FileUpload.value, str(len(files)))
                         flash(Mess.UploadSucc.value.format(count=len(files)))
 
                 # MAKE NEW Folder
@@ -182,7 +189,7 @@ def FlaskAPP():
                                 os.makedirs(FullDestination, exist_ok=True)
                                 flash(Mess.FolderSucc.value)
                                 LOG.info(Console.UserMakeFolder.value.format(username=session['username'], name=newfoldername))
-                                SQL.InsertLog(len(SQL.ReadLogs()) + 1, GetTime(), session['username'], SaveLog.MakeNewFolder.value, newfoldername)
+                                SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.MakeNewFolder.value, newfoldername)
                             except:
                                 LOG.error(Console.NewFolderError.value.format(username=session['username']))
                         else:
@@ -208,7 +215,7 @@ def FlaskAPP():
                             if os.path.exists(FD[1]) == False:
                                 os.rename(FD[0], FD[1])
                                 LOG.info(Console.UsernameRenameFolder.value.format(username=session['username'], old=oldname, new=Newname))
-                                SQL.InsertLog(len(SQL.ReadLogs()) + 1, GetTime(), session['username'], SaveLog.RenameFolder.value, SaveLog.RenameFolderDetail.value.format(old=oldname, new=Newname))
+                                SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.RenameFolder.value, SaveLog.RenameFolderDetail.value.format(old=oldname, new=Newname))
                             else:
                                 flash(Mess.FolderExist.value)
                         except:
@@ -221,8 +228,15 @@ def FlaskAPP():
                     return render_template('message.html', titlemsg=Mess.PageNotFoundTitle.value, detailmsg=Mess.PageNotFoundDetail.value)
                 if os.path.isfile(abs_path):
                     return f'Serving file: {abs_path}'
+                # Get List of all data
                 dir_files = os.listdir(abs_path)
-                return render_template('index.html', files=dir_files, current_path=req_path, form=form)
+                # Sort Data
+                for data in dir_files:
+                    if "." in data:
+                        FS.append(data)
+                    else:
+                        FM.append(data)
+                return render_template('index.html',folders=FM, files=FS, current_path=req_path, form=form)
         else:
             return redirect(url_for('login'))
 
@@ -235,18 +249,18 @@ def FlaskAPP():
         abs_path = os.path.join(app.config['UPLOAD_FOLDER'], req_path, file_name)
         abs_path_thumb = os.path.join(app.config['UPLOAD_FOLDER'], req_path, "thumb_" + file_name)
         if os.path.isfile(abs_path) or os.path.isdir(abs_path):
-            SQL.InsertLog(len(SQL.ReadLogs()) + 1, GetTime(), session['username'], SaveLog.DeleteFile.value, file_name)
+            SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.DeleteFile.value, file_name)
             try:
                 if os.path.isfile(abs_path):
                     os.remove(abs_path)
                     os.remove(abs_path_thumb)
                     LOG.info(Console.UserDeleteFile.value.format(username=session['username'], file=file_name))
-                    SQL.InsertLog(len(SQL.ReadLogs()) + 1, GetTime(), session['username'], SaveLog.DeleteFile.value, file_name)
+                    SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.DeleteFile.value, file_name)
                     flash(Mess.DeleteFile.value)
                 elif os.path.isdir(abs_path):
                     os.rmdir(abs_path)
                     LOG.info(Console.UserDeleteFolder.value.format(username=session['username'], folder=req_path))
-                    SQL.InsertLog(len(SQL.ReadLogs()) + 1, GetTime(), session['username'], SaveLog.DeleteFolder.value, req_path)
+                    SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.DeleteFolder.value, req_path)
                     flash(Mess.DeleteFolder.value)
             except Exception as e:
                 flash(Mess.ErorrDeleteFOF.value.format(error=str(e)))
@@ -308,6 +322,7 @@ def FlaskAPP():
             else:
                 if PassGenerate(session['username'], oldpassword) == accounts[session['username']]['password']:
                     SQL.ChangePassword(session['username'], PassGenerate(session['username'], newpassword))
+                    SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.ChangePassword.value, "****")
                     flash(Mess.ChangepasswordSuccess.value)
         # User Register
         if form.register.data == True:
@@ -328,6 +343,7 @@ def FlaskAPP():
                             SQL.Register(username, PassGenerate(username, password), regselectpermission)
                             flash(Mess.RegisterSuccess.value)
                             LOG.info(Console.RegisterSuccess.value.format(admin=session['username'], username=username))
+                            SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.UserRegister.value, username)
                             return redirect(url_for('panel'))
                         else:
                             flash(Mess.PasswordNotMatch.value)
@@ -341,6 +357,7 @@ def FlaskAPP():
             else:
                 SQL.Changepermission(selectuser, selectpermission)
                 flash(Mess.ChangePermission.value)
+                SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.ChangePermi.value, selectuser)
                 LOG.info(Console.SetPermission.value.format(admin=session['username'], username=selectuser, permission=selectpermission))
         # Clear Log
         if form.clearlog.data == True:
@@ -359,10 +376,12 @@ def FlaskAPP():
                     SQL.DeleteUsername(selectusername)
                     flash(Mess.DeleteUsername.value.format(username=selectusername))
                     LOG.info(Console.DelUsername.value.format(admin=session['username'], username=selectusername))
+                    SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.DeleteUser.value, selectusername)
                     return redirect(url_for('panel'))
             return render_template('panel.html', form=form)
         # Restart core
         if form.restartcore.data == True:
+            SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.ReloadCore.value, "****")
             restart()
         if "username" in session:
             return render_template('panel.html', form=form)
@@ -372,11 +391,17 @@ def FlaskAPP():
     # Log page
     @app.route('/log', methods=['GET', 'POST'])
     def log():
+        SLog = []
+        form = SIL()
+        GetUser = form.SU.data
+        if form.submit.data == True:
+            GetUser = form.SU.data
+            SLog = SQL.ReadLogs(GetUser)
         if "username" in session:
             if int(session['permission']) == 4:
                 return render_template('message.html', titlemsg=Mess.Warningtitle.value, detailmsg=Mess.AccountLock.value)
             else:
-                return render_template('log.html', logs=SQL.ReadLogs())
+                return render_template('log.html', logs=SLog, form=form, username=form.SU.data)
         else:
             return redirect(url_for('login'))
     
@@ -391,6 +416,7 @@ def FlaskAPP():
     def logout():
         try:
             LOG.debug(Console.Logout.value.format(username=session["username"]))
+            SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.LO.value ,SaveLog.LogOut.value)
             session.clear()
             return redirect(url_for('login'))
         except:

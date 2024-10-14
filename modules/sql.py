@@ -1,6 +1,6 @@
 import mysql.connector, sys, time
 
-from modules.strings import Console
+from modules.strings import Console, Objects
 from modules.config import Config
 from modules.strings import Console
 from modules.log import LOG
@@ -26,11 +26,13 @@ class sql():
             sys.exit(1)
     
     def ReadAccounts(self):
+        usernames.append((0, Objects.ChooseUsername.value))
+        usernames.append((1, Objects.AllUsers.value))
         start = time.perf_counter()
         self.cursor.execute('SELECT * FROM users')
         for row in self.cursor:
             accounts[row[1]] = {'username': row[1], 'password': row[2], 'permission': row[3]}
-            usernames.append(row[1])
+            usernames.append((row[1], row[1]))
         LOG.info(Console.Load.value.format(number=len(accounts), table="users", time=TimeDo(start)))
         return accounts, usernames
     
@@ -59,9 +61,12 @@ class sql():
         self.araax.commit()
         accounts[username].update({'password': password})
 
-    def ReadLogs(self):
+    def ReadLogs(self, username):
         self.araax.reconnect()
-        self.cursor.execute('SELECT * FROM logs')
+        if username == "1":
+            self.cursor.execute('SELECT * FROM logs')
+        elif not username == "0" or "1":
+            self.cursor.execute(f"SELECT * FROM logs WHERE user = '{username}'")
         logs = self.cursor.fetchall()
         return logs
 

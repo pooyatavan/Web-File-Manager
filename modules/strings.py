@@ -89,6 +89,8 @@ class Objects(enum.Enum):
     NewFolder = 'پوشه جدید'
     ChooseFile = 'انتخاب فایل'
     FilesName = 'اسم فایل'
+    ChooseUsername = 'انتخاب نام کاربری'
+    AllUsers = 'همه کاربر ها'
 
 class SelectUser(enum.Enum):
     choose = 'انتخاب'
@@ -104,3 +106,12 @@ class SaveLog(enum.Enum):
     FileUpload = 'آپلود'
     RenameFolder = 'تغییر نام پوشه'
     RenameFolderDetail = 'از {old} به {new}'
+    UserRegister = 'ثبت نام'
+    ChangePassword = 'تغییر رمز عبور'
+    ChangePermi = 'تغییر سطع دسترسی'
+    DeleteUser = 'پاک کردن  یوزر'
+    ReloadCore = 'خاموش روشن کردن هسته'
+    LogOut = 'خروج از سیستم'
+    LO = 'خروج'
+    LogIn = 'ورود به سیستم'
+    LI = 'ورود'
