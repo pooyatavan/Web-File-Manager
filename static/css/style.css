@@ -12,7 +12,6 @@ body {
     direction: rtl;
     top: 0px;
     background-color: #ececec;
-    margin: 0;
     padding: 0;
 }
 
@@ -125,7 +124,7 @@ input {
 
 .btn-remove {
     position: relative;
-    top : -20px;
+    top : 0px;
     padding: 10px;
     background: none;
     background-color: #fd0d3d;
@@ -184,6 +183,19 @@ input {
 .form a{
     margin: auto;
     text-align: center;
+}
+
+.search-log-form {
+    position: relative;
+    top: 60px;
+    width: 400px;
+    height: 150px;
+    align-items: baseline;
+    margin: auto;
+}
+
+.search-log-form select{
+    width: 200px;
 }
 
 input[type="file"] {
@@ -305,7 +317,7 @@ input[type="file"] {
     margin: auto;
 }
 
-.images-name{
+.images-name {
     color: #000000;
     white-space: nowrap;
     overflow: hidden;
@@ -316,7 +328,7 @@ input[type="file"] {
 }
 
 .img-container {
-    width: 200px;
+    width: 240px;
     height: 250px;
     display: inline-block;
     text-align: center;
@@ -329,7 +341,7 @@ input[type="file"] {
 }
 
 .img-container img{
-    width: 200px;
+    width: 240px;
     height: 200px;
     border-radius: 5px;
 }
@@ -351,7 +363,7 @@ input[type="file"] {
     margin: auto;
 }
 
-.logo_login img{
+.logo_login img {
     width: 150px;
 }
 
@@ -397,16 +409,6 @@ input[type="file"] {
     -webkit-box-shadow: 0px 0px 39px 0px rgba(0,0,0,0.56); 
     box-shadow: 0px 0px 39px 0px rgba(0,0,0,0.56);
 }
-  
-.modal__footer {
-    text-align: right;
-    a {
-      color: #585858;
-    }
-    i {
-      color: #d02d2c;
-    }
-}
 
 .modal__close {
     position: absolute;
@@ -427,7 +429,7 @@ input[type="file"] {
 }
 
 .gallery-item {
-    width: 200px;
+    width: 240px;
     height: 150px;
     position: relative;
     cursor: pointer;
@@ -637,4 +639,37 @@ label {
     border-radius: 5px;
     color: #ffffff;
     cursor: pointer;
-  }
+}
+
+@media screen {
+    .printable { display: none;}
+    .non-printable { display: block;}
+}
+@media print {
+    .non-printable { display: none;}
+    .printable { display: block;}
+}
+
+.btn-print {
+    padding: 10px;
+    background: none;
+    background-color: #0d6efd;
+    min-width: 100px;
+    border-radius: 5px;
+    text-decoration: none;
+    border: none;
+    color: #ffffff;
+    margin-left: 10px;
+    transition: 0.1s ease-in-out;
+    z-index: 1;
+}
+
+.btn-print:hover {
+    background-color: #3888ff;
+    cursor: pointer;
+}
+
+.op {
+    display: flex;
+    align-self: center;
+}
