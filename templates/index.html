@@ -53,37 +53,47 @@
         {% endwith %}
         <!-- Files and folder -->
         <div class="list-group" dir="ltr">
-            {% if not files %}
+            {% if not folders and not files %}
                 <div class="empty">
                     <img src="{{ url_for('style', filename='img/empty.png')}}"><br>
                     <a>فایل یا پوشه ای موجود نمی باشد</a>
                 </div>
             {% else %}
                 <div class="gallery">
+                    <!-- for list folders -->
+                    {% for folder in folders %}
+                        <div class="img-container">
+                            <a href="{{ url_for('dir_listing', req_path=current_path + '/' + folder) }}">
+                                <img src="{{ url_for('style', filename='img/folder.png') }}" alt="{{ folder }}" style="max-height: 150px;">
+                                <div class="images-cont">{{ folder }}</div>
+                            </a>
+                            {% if session['permission'] | int >= 2 %}
+                                <form class="form" action="{{ url_for('delete_file') }}" method="post">
+                                    <input type="hidden" name="path" value="{{ current_path }}">
+                                    <input type="hidden" name="file_name" value="{{ folder }}">
+                                    <button type="submit" class="btn-remove">حذف</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <!-- for list files -->
                     {% for file in files %}
                         {% if "thumb" not in file %}
                             <div class="img-container">
-                                {% if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif')) %}
-                                    {% if current_path == '' %}
-                                        <div class="gallery-item">
-                                            <img src="{{ url_for('static', filename='' ~ current_path ~ '' ~ 'thumb_' + file) }}" data-src="{{ url_for('static', filename='' ~ current_path ~ '' + file) }}" data-image="{{ url_for('static', filename='' ~ current_path ~ '' + file) }}" alt="{{ file }}" class="gallery-item gallery-item-image"/>
-                                        </div>
-                                        <div class="item-desc">
-                                            <a href="{{ url_for('static', filename='' ~ current_path ~ '' ~ file) }}">{{ file }}</a>
-                                        </div>
-                                    {% else %}
-                                        <div class="gallery-item">
-                                            <img src="{{ url_for('static', filename='' ~ current_path ~ '/' ~ 'thumb_' + file) }}" src="{{ url_for('static', filename='' ~ current_path ~ '/' + file) }}" data-image="{{ url_for('static', filename='' ~ current_path~ '/' ~ file) }}" alt="{{ file }}" class="gallery-item gallery-item-image"/>
-                                        </div>
-                                        <div class="item-desc">
-                                            <a href="{{ url_for('static', filename='' ~ current_path ~ '/' ~ file) }}">{{ file }}</a>
-                                        </div>
-                                    {% endif %}
+                                {% if current_path == '' %}
+                                    <div class="gallery-item">
+                                        <img src="{{ url_for('static', filename='' ~ current_path ~ '' ~ 'thumb_' + file) }}" data-src="{{ url_for('static', filename='' ~ current_path ~ '' + file) }}" data-image="{{ url_for('static', filename='' ~ current_path ~ '' + file) }}" alt="{{ file }}" class="gallery-item gallery-item-image"/>
+                                    </div>
+                                    <div class="item-desc">
+                                        <a href="{{ url_for('static', filename='' ~ current_path ~ '' ~ file) }}">{{ file }}</a>
+                                    </div>
                                 {% else %}
-                                    <a href="{{ url_for('dir_listing', req_path=current_path + '/' + file) }}">
-                                        <img src="{{ url_for('style', filename='img/folder.png') }}" alt="{{ file }}" style="max-height: 150px;">
-                                        <div class="images-cont">{{ file }}</div>
-                                    </a>
+                                    <div class="gallery-item">
+                                        <img src="{{ url_for('static', filename='' ~ current_path ~ '/' ~ 'thumb_' + file) }}" src="{{ url_for('static', filename='' ~ current_path ~ '/' + file) }}" data-image="{{ url_for('static', filename='' ~ current_path~ '/' ~ file) }}" alt="{{ file }}" class="gallery-item gallery-item-image"/>
+                                    </div>
+                                    <div class="item-desc">
+                                        <a href="{{ url_for('static', filename='' ~ current_path ~ '/' ~ file) }}">{{ file }}</a>
+                                    </div>
                                 {% endif %}
                                 {% if session['permission'] | int >= 2 %}
                                     <form class="form" action="{{ url_for('delete_file') }}" method="post">
@@ -91,6 +101,8 @@
                                         <input type="hidden" name="file_name" value="{{ file }}">
                                         <button type="submit" class="btn-remove">حذف</button>
                                     </form>
+                                    <br>
+                                    <button class="btn-remove" onclick="printImg('http://192.168.3.20/dir/aaa_(1).jpg')">Print</button>
                                 {% endif %}
                             </div>
                         {% endif %}
@@ -107,4 +119,5 @@
         <a class="prev">&#10095;</a>
     </div>
     <script src="{{ url_for('style', filename='js/gallery.js')}}"></script>
+    <script src="{{ url_for('style', filename='js/print.js')}}"></script>
 {% endblock content %}

@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
+  <form action="" method="POST" class="search-log-form">
+    {{ form.hidden_tag() }}
+    {{ form.SU() }}
+    {{ form.submit() }}
+  </form>
   {% if not logs %}
     <div class="error">
       <img src="{{ url_for('style', filename='img/log.png')}}"><br>
@@ -7,13 +12,13 @@
     </div>
   {% else %}
     <table id="log">
-        <tr>
-          <th>شماره</th>
-          <th>تاریخ</th>
-          <th>کاربر</th>
-          <th>عملیات</th>
-          <th>توضیحات</th>
-        </tr>
+      <tr>
+        <th>شماره</th>
+        <th>تاریخ</th>
+        <th>کاربر</th>
+        <th>عملیات</th>
+        <th>توضیحات</th>
+      </tr>
       {% for log in logs %}
         <tr>
           <td>{{ log[0] }}</td>
