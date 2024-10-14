@@ -79,17 +79,28 @@
                     <!-- for list files -->
                     {% for file in files %}
                         {% if "thumb" not in file %}
-                            <div class="img-container">
+                            <div id="print-area" class="img-container">
                                 {% if current_path == '' %}
                                     <div class="gallery-item">
-                                        <img src="{{ url_for('static', filename='' ~ current_path ~ '' ~ 'thumb_' + file) }}" data-src="{{ url_for('static', filename='' ~ current_path ~ '' + file) }}" data-image="{{ url_for('static', filename='' ~ current_path ~ '' + file) }}" alt="{{ file }}" class="gallery-item gallery-item-image"/>
+                                        <!-- Assign a unique ID to each image using the loop index -->
+                                        <img id="image-to-print-{{ loop.index }}" 
+                                            src="{{ url_for('static', filename='' ~ current_path ~ '' ~ 'thumb_' + file) }}" 
+                                            data-src="{{ url_for('static', filename='' ~ current_path ~ '' + file) }}" 
+                                            data-image="{{ url_for('static', filename='' ~ current_path ~ '' + file) }}" 
+                                            alt="{{ file }}" 
+                                            class="gallery-item gallery-item-image"/>
                                     </div>
                                     <div class="item-desc">
                                         <a href="{{ url_for('static', filename='' ~ current_path ~ '' ~ file) }}">{{ file }}</a>
                                     </div>
                                 {% else %}
                                     <div class="gallery-item">
-                                        <img src="{{ url_for('static', filename='' ~ current_path ~ '/' ~ 'thumb_' + file) }}" src="{{ url_for('static', filename='' ~ current_path ~ '/' + file) }}" data-image="{{ url_for('static', filename='' ~ current_path~ '/' ~ file) }}" alt="{{ file }}" class="gallery-item gallery-item-image"/>
+                                        <!-- Assign a unique ID to each image using the loop index -->
+                                        <img id="image-to-print-{{ loop.index }}" 
+                                            src="{{ url_for('static', filename='' ~ current_path ~ '/' ~ 'thumb_' + file) }}" 
+                                            data-image="{{ url_for('static', filename='' ~ current_path ~ '/' ~ file) }}" 
+                                            alt="{{ file }}" 
+                                            class="gallery-item gallery-item-image"/>
                                     </div>
                                     <div class="item-desc">
                                         <a href="{{ url_for('static', filename='' ~ current_path ~ '/' ~ file) }}">{{ file }}</a>
@@ -99,10 +110,12 @@
                                     <form class="form" action="{{ url_for('delete_file') }}" method="post">
                                         <input type="hidden" name="path" value="{{ current_path }}">
                                         <input type="hidden" name="file_name" value="{{ file }}">
-                                        <button type="submit" class="btn-remove">حذف</button>
+                                        <div class="op">
+                                            <button type="submit" class="btn-remove">حذف</button>
+                                            <!-- Pass the unique image ID to the printImage function -->
+                                            <button type="button" class="btn-print" onclick="printImage('image-to-print-{{ loop.index }}')">چاپ</button>
+                                        </div>
                                     </form>
-                                    <br>
-                                    <button class="btn-remove" onclick="printImg('http://192.168.3.20/dir/aaa_(1).jpg')">Print</button>
                                 {% endif %}
                             </div>
                         {% endif %}
@@ -118,6 +131,7 @@
         <a class="next">&#10094;</a>
         <a class="prev">&#10095;</a>
     </div>
+
     <script src="{{ url_for('style', filename='js/gallery.js')}}"></script>
     <script src="{{ url_for('style', filename='js/print.js')}}"></script>
 {% endblock content %}
