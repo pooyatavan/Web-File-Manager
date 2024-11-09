@@ -1,70 +1,85 @@
 {% extends "layout.html" %}
 {% block content %}
   <div class="panel">
-    <div class="panel-title"><a>پنل</a></div>
-      <!-- Flash messages for feedback -->
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-          <div class="alert alert-info" role="alert">
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
+    <!-- Flash messages for feedback -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-info" role="alert">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% endwith %}
+    <div class="wrapper">
+      <div class="tabs">
+        <div class="tab">
+          <input type="radio" name="css-tabs" id="tab-5" checked class="tab-switch">
+          <label for="tab-5" class="tab-label">تغییر رمز عبور</label>
+          <div class="tab-content">
+            <form action="" method="POST">
+              {{ form.hidden_tag() }}
+              {{ form.oldpassword() }}
+              {{ form.newpassword() }}
+              {{ form.renewpassword() }}
+              {{ form.changepassword() }}
+            </form>
+          </div>
+        </div>
+        {% if perm['admin'] | int >= 1 %}
+          <div class="tab">
+            <input type="radio" name="css-tabs" id="tab-1" class="tab-switch">
+            <label for="tab-1" class="tab-label">ثبت نام کاربر جدید</label>
+            <div class="tab-content">
+              <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                {{ form.username() }}
+                {{ form.password() }}
+                {{ form.repassword() }}
+                {{ form.register() }}
+              </form>
+            </div>
+          </div>
+          <div class="tab">
+            <input type="radio" name="css-tabs" id="tab-2" class="tab-switch">
+            <label for="tab-2" class="tab-label">تغییر سطح دسترسی کاربران</label>
+            <div class="tab-content" id="persmission-div">
+              <form  id="permission_form" action="" method="POST" style="width: 600px;">
+              </form>
+             </div>
+          </div>
+          <div class="tab">
+            <input type="radio" name="css-tabs" id="tab-3" class="tab-switch">
+            <label for="tab-3" class="tab-label">لاگ</label>
+            <div class="tab-content">
+              <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                {{ form.clearlog() }}
+              </form>
+            </div>
+          </div>
+          <div class="tab">
+            <input type="radio" name="css-tabs" id="tab-4" class="tab-switch">
+            <label for="tab-4" class="tab-label">ری استارت</label>
+            <div class="tab-content">
+              <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                {{ form.restartcore() }}
+              </form>
+            </div>
+          </div>
+          <div class="tab">
+            <input type="radio" name="css-tabs" id="tab-6" class="tab-switch">
+            <label for="tab-6" class="tab-label">پاک کردن اکانت</label>
+            <div class="tab-content">
+              <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                {{ form.deleteusername() }}
+              </form>
+            </div>
           </div>
         {% endif %}
-      {% endwith %}
-      {% if session['permission'] | int == 3 %}
-        <div class="panel-app">
-          <form action="" method="POST">
-            <a>ثبت نام کاربر جدید</a>
-            {{ form.hidden_tag() }}
-            {{ form.username() }}
-            {{ form.password() }}
-            {{ form.repassword() }}
-            {{ form.regselectpermission() }}
-            {{ form.register() }}
-          </form>
-        </div>
-        <div class="panel-app">
-          <form action="" method="POST">
-            <p> تغییر سطح دسترسی کاربران</p>
-            {{ form.hidden_tag() }}
-            {{ form.selectuser() }}
-            {{ form.selectpermission() }}
-            {{ form.changepermission() }}
-          </form>
-        </div>
-        <div class="panel-app">
-          <form action="" method="POST">
-            <p> پاک کردن لاگ ها در فایل لاگ</p>
-            {{ form.hidden_tag() }}
-            {{ form.clearlog() }}
-          </form>
-        </div>
-        <div class="panel-app">
-          <form action="" method="POST">
-            <p>در مواقع ضروری استفاده شود</p>
-            {{ form.hidden_tag() }}
-            {{ form.restartcore() }}
-          </form>
-        </div>
-        <div class="panel-app">
-          <form action="" method="POST">
-            <p>پاک کردن نام کربری و دقت داشته باشد بعد از پاک کردن کاربر سرور ری استارت میشود</p>
-            {{ form.hidden_tag() }}
-            {{ form.selectuserdelete() }}
-            {{ form.deleteusername() }}
-          </form>
-        </div>
-        <div class="panel-app">
-          <form action="" method="POST">
-            <p>تغییر رمز عبور
-            {{ form.hidden_tag() }}
-            {{ form.oldpassword() }}
-            {{ form.newpassword() }}
-            {{ form.renewpassword() }}
-            {{ form.changepassword() }}
-          </form>
-        </div>
-      {% endif %}
-</div>
-{% endblock content %}
+      </div>
+    </div>
+  </div>
+  {% endblock content %}

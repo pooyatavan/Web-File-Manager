@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="error">
-        <img src="{{ url_for('style', filename='img/404.png')}}"/>
+        <img src="{{ url_for('style', filename='img/' + image + '.png') }}" />
         <h1>{{ titlemsg }}</h1>
         <p>{{ detailmsg }}</p>
     </div>

@@ -13,9 +13,8 @@
                 <a href="#" class="modal__close">&times;</a>
             </div>
         </div>
-
         <div class="control-right">
-            {% if session['permission'] | int >= 2 %}
+            {% if perm['upload'] | int >= 1 %}
             <form action="" method="post" enctype="multipart/form-data" class="form">
                 {{ form.hidden_tag() }}
                 {{ form.filesname() }}
@@ -30,12 +29,13 @@
             </form>
             {% endif %}
         </div>
-        <!-- FYI -->
         <div class="control-left">
             <form class="form">
                 <a href="javascript: history.go(-1)" class="btn-back">برگشت</a>
                 <h5>{{ current_path }}</h5>
-                <a href="#demo-modal" class="btn">تغییر نام پوشه</a>
+                {% if perm['rename'] | int >= 1 %}
+                    <a href="#demo-modal" class="btn">تغییر نام پوشه</a>
+                {% endif %}
             </form>
         </div>
     </div>
@@ -67,7 +67,7 @@
                                 <img src="{{ url_for('style', filename='img/folder.png') }}" alt="{{ folder }}" style="max-height: 150px;">
                                 <div class="images-cont">{{ folder }}</div>
                             </a>
-                            {% if session['permission'] | int >= 2 %}
+                            {% if perm['delete'] | int >= 1 %}
                                 <form class="form" action="{{ url_for('delete_file') }}" method="post">
                                     <input type="hidden" name="path" value="{{ current_path }}">
                                     <input type="hidden" name="file_name" value="{{ folder }}">
@@ -76,6 +76,7 @@
                             {% endif %}
                         </div>
                     {% endfor %}
+                    
                     <!-- for list files -->
                     {% for file in files %}
                         {% if "thumb" not in file %}
@@ -106,14 +107,16 @@
                                         <a href="{{ url_for('static', filename='' ~ current_path ~ '/' ~ file) }}">{{ file }}</a>
                                     </div>
                                 {% endif %}
-                                {% if session['permission'] | int >= 2 %}
+                                {% if perm['delete'] | int >= 1 %}
                                     <form class="form" action="{{ url_for('delete_file') }}" method="post">
                                         <input type="hidden" name="path" value="{{ current_path }}">
                                         <input type="hidden" name="file_name" value="{{ file }}">
                                         <div class="op">
                                             <button type="submit" class="btn-remove">حذف</button>
-                                            <!-- Pass the unique image ID to the printImage function -->
-                                            <button type="button" class="btn-print" onclick="printImage('image-to-print-{{ loop.index }}')">چاپ</button>
+                                            {% if perm['print'] | int >= 1 %}
+                                                <!-- Pass the unique image ID to the printImage function -->
+                                                <button type="button" class="btn-print" onclick="printImage('image-to-print-{{ loop.index }}')">چاپ</button>
+                                            {% endif %}
                                         </div>
                                     </form>
                                 {% endif %}

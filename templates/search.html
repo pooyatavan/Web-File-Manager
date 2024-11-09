@@ -21,31 +21,58 @@
         </div>
     </div>
     <!-- File and folder listing -->
-    <div class="container-explor" dir="ltr">
-        <!-- if list is empty -->
-        {% if not files and not folders %}
-            <div class="empty">
-                <img src="{{ url_for('style', filename='img/search.png')}}"><br>
-                <a>نام فایل یا پوشه مورد نظر را وارد کنید</a>
-            </div>
-        {% else %}
-            <!-- search for files -->
-            {% for file in files %}
-                <div class="search-res">
-                    {% if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif')) %}
-                        <div class="search-res-left"><img src="{{ 'dir/' + file }}"></div>
-                        <div class="search-res-right"><a class="download" href="{{ 'dir/' + file }}">دانلود</a></div>
-                        <div class="search-res-right"><a class="file-name" href="{{ 'dir/' + file }}">{{ file }}</a></div>
-                    {% endif %}
+    <div class="container-explor">
+        <div class="list-group" dir="ltr">
+            <!-- if list is empty -->
+            {% if not files and not folders %}
+                <div class="empty">
+                    <img src="{{ url_for('style', filename='img/search.png')}}"><br>
+                    <a>نام فایل یا پوشه مورد نظر را وارد کنید</a>
                 </div>
-            {% endfor %}
-            <!-- search for folder -->
-            {% for folder in folders %}
-                <div class="search-res">
-                    <div class="search-res-left"><img src="{{ url_for('style', filename='img/folder.png') }}"></div>
-                    <div class="search-res-right"><a class="folder" href="{{ folder }}">به مسیر</a></div>
-                    <div class="search-res-right"><a class="file-name" href="{{ folder }}">{{ folder }}</a></div>
-            {% endfor %}
-        {% endif %}
+            {% else %}
+                <div class="gallery">
+                    {% for folder in folders %}
+                        <div class="img-container">
+                            <a href="{{ folder }}">
+                                <img src="{{ url_for('style', filename='img/folder.png') }}" alt="{{ folder }}" style="max-height: 150px;">
+                                <div class="images-cont">{{ folder }}</div>
+                            </a>
+                        </div>
+                    {% endfor %}
+
+                    {% for file in files %}
+                        {% if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif')) %}
+                            <div id="print-area" class="img-container">
+                                <div class="gallery-item">
+                                    <img id="image-to-print-{{ loop.index }}" src="{{ 'dir/' + file }}" alt="{{ file }}" data-image="{{ 'dir/' + file }}" data-src="{{ 'dir/' + file }}" class="gallery-item gallery-item-image">
+                                </div>
+                                <div class="item-desc">
+                                    <a href="{{ 'dir/' + file }}">{{ file }}</a>
+                                </div>
+                                <div class="op">
+                                    <a class="download" href="{{ 'dir/' + file }}">دانلود</a>
+                                    <button style="margin: auto;" type="button" class="btn-print" onclick="printImage('image-to-print-{{ loop.index }}')">چاپ</button>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
     </div>
+
+    <div id="lightbox" class="lightbox">
+        <span class="close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+        <div id="caption"></div>
+        <a class="next">&#10094;</a>
+        <a class="prev">&#10095;</a>
+    </div>
+    
+    <script src="{{ url_for('style', filename='js/gallery.js')}}"></script>
+    <script src="{{ url_for('style', filename='js/print.js')}}"></script>
 {% endblock content %}
+
+
+
+
