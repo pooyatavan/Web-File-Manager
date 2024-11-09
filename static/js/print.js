@@ -1,46 +1,43 @@
-    function printImage(imageId) {
-        // Get the image element using the unique image ID passed as a parameter
-        const imageSrc = document.getElementById(imageId).src;
-        
-        // Save the current page content
-        const originalContent = document.body.innerHTML;
+function printImage(imageId) {
+    // Get the image element using the unique image ID passed as a parameter
+    const imageSrc = document.getElementById(imageId).src;
 
-        // Create the HTML structure with only the image to print
-        const tagImage = `
-            <img src="${imageSrc}" style="width: 100%; height: 100%; object-fit: contain;" />
-        `;
-        
-        // Replace the page content with just the image and apply print styles
-        document.body.innerHTML = `
-            <html>
-                <head>
-                    <style>
-                        @media print {
-                            body {
-                                margin: 0;
-                                padding: 0;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                height: 100vh;
-                            }
-                            img {
-                                width: 100%;
-                                height: 100%;
-                                object-fit: contain;
-                            }
+    // Open a new window
+    const printWindow = window.open('', '_blank', 'width=800,height=600');
+
+    // Write the HTML and CSS for the print window
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Print Image</title>
+                <style>
+                    @media print {
+                        body {
+                            margin: 0;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
                         }
-                    </style>
-                </head>
-                <body>
-                    ${tagImage}
-                </body>
-            </html>
-        `;
-        
-        // Trigger the print dialog
-        window.print();
-        
-        // Restore the original page content after printing
-        document.body.innerHTML = originalContent;
-    }
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: contain;
+                        }
+                    }
+                </style>
+            </head>
+            <body>
+                <img src="${imageSrc}" style="width: 100%; height: 100%; object-fit: contain;" />
+            </body>
+        </html>
+    `);
+
+    // Wait for the new window to finish loading, then trigger the print
+    printWindow.document.close(); // Close the document stream to indicate that the writing is complete
+    printWindow.focus(); // Ensure the window is focused
+    printWindow.print(); // Trigger the print dialog
+    printWindow.onafterprint = function () {
+        printWindow.close(); // Close the print window after printing
+    };
+}
