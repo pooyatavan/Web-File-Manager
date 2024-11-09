@@ -33,6 +33,7 @@ class Mess(enum.Enum):
     SelectPermiss = 'لطفا سطح دسترسی را انتخاب کنید'
     NotinDir = 'اول وارد پوشه شوید سپس نام پوشه را تغییر دهید'
     FileNameEmpty = 'اسم فایل را انتخاب گنید'
+    NotPerm = 'شما دسترس ی به این صفحه را ندارید'
 
 class Console(enum.Enum):
     ServerRunning = 'Server is running on {ip}:{port}'
@@ -65,6 +66,7 @@ class Console(enum.Enum):
     NewFolderError = 'error while making a new folder for user {username}'
     ScanForThumbnail = 'System generate thumbnail for {counter} image fle'
     ErrorRenameFolder = 'Error while rename folder for user {username}'
+    SessionError = "there is a problem in read session time"
 
 class Objects(enum.Enum):
     Search = 'جستجو'
@@ -89,12 +91,10 @@ class Objects(enum.Enum):
     NewFolder = 'پوشه جدید'
     ChooseFile = 'انتخاب فایل'
     FilesName = 'اسم فایل'
-    ChooseUsername = 'انتخاب نام کاربری'
-    AllUsers = 'همه کاربر ها'
 
 class SelectUser(enum.Enum):
     choose = 'انتخاب'
-    admin = 'ادممین'
+    admin = 'ادمین'
     user = 'عادی'
     Guest = 'مهمان'
     Lock = 'قفل'

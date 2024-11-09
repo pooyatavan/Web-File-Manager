@@ -1,6 +1,6 @@
 import mysql.connector, sys, time
 
-from modules.strings import Console, Objects
+from modules.strings import Console
 from modules.config import Config
 from modules.strings import Console
 from modules.log import LOG
@@ -9,45 +9,86 @@ from modules.tools import network, TimeDo
 accounts = {}
 usernames = []
 logs = []
+perm = {}
+permusers = []
+permlist = []
 
 class sql():
     def __init__(self):
         try:
-            self.araax = mysql.connector.connect(host=network(),
-                                                 database=Config.read()['sql']['database'],
-                                                 user=Config.read()['sql']['username'],
-                                                 password=Config.read()['sql']['password'],
-                                                 port=int(Config.read()['sql']['port']))
+            self.araax = mysql.connector.connect(host=network(), user=Config.read()['sql']['username'], password=Config.read()['sql']['password'], database=Config.read()['sql']['database'], auth_plugin='mysql_native_password')
             self.cursor = self.araax.cursor()
             if self.araax.is_connected():
-                LOG.info(Console.ConnSQLSuccess.value.format(ip=Config.read()['sql']['ip']))
+                LOG.info(Console.ConnSQLSuccess.value.format(ip=network()))
         except:
-            LOG.error(Console.ConnSQLError.value.format(ip=Config.read()['sql']['ip']))
+            LOG.error(Console.ConnSQLError.value.format(ip=network()))
             sys.exit(1)
     
     def ReadAccounts(self):
-        usernames.append((0, Objects.ChooseUsername.value))
-        usernames.append((1, Objects.AllUsers.value))
         start = time.perf_counter()
         self.cursor.execute('SELECT * FROM users')
         for row in self.cursor:
-            accounts[row[1]] = {'username': row[1], 'password': row[2], 'permission': row[3]}
+            accounts[row[1]] = {'id': row[0], 'username': row[1], 'password': row[2]}
             usernames.append((row[1], row[1]))
         LOG.info(Console.Load.value.format(number=len(accounts), table="users", time=TimeDo(start)))
         return accounts, usernames
     
-    def Register(self, username, password, permission):
-        self.araax.reconnect()
-        self.cursor.execute("INSERT INTO users (username, password, permission) VALUES (%s, %s, %s)", (username, password, permission))
-        self.araax.commit()
-        accounts[username] = {'username': username, 'password': password, 'permission': permission}
-        usernames.append(username)
+    def Readpermusers(self):
+        permusers = []
+        self.cursor.execute('SELECT * FROM users')
+        for row in self.cursor:
+            permusers.append((row[0], row[1]))
+        return permusers
+    
+    def SearchSQL(self):
+        counter = 1
+        IDList = []
+        self.cursor.execute('SELECT * FROM users')
+        datas = self.cursor.fetchall()
+        for data in datas:
+            IDList.append(data[0])
+        while True:
+            if counter not in IDList:
+                return counter
+            else:
+                counter = counter + 1
 
-    def Changepermission(self, username, permission):
+    def ReadPerm(self):
+        start = time.perf_counter()
+        self.cursor.execute('SELECT * FROM perm')
+        for row in self.cursor:
+            perm[row[0]] = {'delete': row[1], 'upload': row[2], 'newfolder': row[3], 'rename': row[4], 'log': row[5], 'admin': row[6], 'print': row[7], 'search': row[8]}
+        LOG.info(Console.Load.value.format(number=len(accounts), table="perm", time=TimeDo(start)))
+        return perm
+    
+    def AfterReadPerm(self):
+        permlist = []
+        self.cursor.execute('SELECT * FROM perm')
+        for row in self.cursor:
+            permlist.append({'id': row[0], 'delete': row[1], 'upload': row[2], 'newfolder': row[3], 'rename': row[4], 'log': row[5], 'admin': row[6], 'print': row[7], 'search': row[8]})
+        return permlist
+    
+    def InsertPerm(self, id):
         self.araax.reconnect()
-        self.cursor.execute(f"UPDATE users SET permission = '{permission}' WHERE username = '{username}'")
+        self.cursor.execute("INSERT INTO perm (id, `delete`, upload, newfolder, `rename`, log, admin, `print`, search) VALUES (%s, %s, %s,%s, %s, %s, %s, %s, %s)", (int(id), 0, 0, 0, 0, 0, 0, 0, 0))
         self.araax.commit()
-        accounts[username].update({'permission': permission})
+        perm[id] = {'delete': 0, 'upload': 0, 'newfolder': 0, 'rename': 0, 'log': 0, 'admin': 0, 'print': 0, 'search': 0}
+        permlist.append({'id': 0, 'delete': 0, 'upload': 0, 'newfolder': 0, 'rename': 0, 'log': 0, 'admin': 0, 'print': 0, 'search': 0})
+
+    def Register(self, username, password):
+        RegID = self.SearchSQL()
+        self.araax.reconnect()
+        self.cursor.execute("INSERT INTO users (id, username, password) VALUES (%s, %s, %s)", (RegID, username, password))
+        self.araax.commit()
+        accounts[username] = {'id': RegID, 'username': username, 'password': password}
+        usernames.append(username)
+        self.InsertPerm(RegID)
+
+    def Changepermission(self, userid, permissions):
+        self.araax.reconnect()
+        self.cursor.execute("""UPDATE perm SET `delete` = %s, upload = %s, newfolder = %s, `rename` = %s, log = %s, admin = %s, `print` = %s, search = %s WHERE id = %s""", (permissions['delete'], permissions['upload'], permissions['newfolder'], permissions['rename'], permissions['log'], permissions['admin'], permissions['print'], permissions['search'], userid ))
+        self.araax.commit()
+        perm[int(userid)].update(permissions)
 
     def DeleteUsername(self, selectusername):
         self.araax.reconnect()
