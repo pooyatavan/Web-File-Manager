@@ -34,6 +34,7 @@ class Mess(enum.Enum):
     NotinDir = 'اول وارد پوشه شوید سپس نام پوشه را تغییر دهید'
     FileNameEmpty = 'اسم فایل را انتخاب گنید'
     NotPerm = 'شما دسترس ی به این صفحه را ندارید'
+    Keyboard = 'کیبور را به انگلیسی تغییر دهید'
 
 class Console(enum.Enum):
     ServerRunning = 'Server is running on {ip}:{port}'

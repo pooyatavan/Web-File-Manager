@@ -51,7 +51,7 @@ class sql():
             if counter not in IDList:
                 return counter
             else:
-                counter = counter + 1
+                counter += 1
 
     def ReadPerm(self):
         start = time.perf_counter()

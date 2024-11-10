@@ -9,7 +9,7 @@ from modules.password import PassGenerate
 from modules.strings import Console,Mess, Objects, SaveLog
 from modules.log import LOG
 from modules.sql import SQL
-from modules.tools import restart, RandomKey, GetTime, RemoveIP
+from modules.tools import restart, RandomKey, GetTime, RemoveIP, CheckLetter
 from modules.image import compress_image
 from modules.config import Config
 
@@ -78,6 +78,23 @@ class PanelForm(FlaskForm):
     renewpassword = StringField(render_kw={"placeholder": Objects.ReNewPass.value, "class": "form-control", "type": "password"})
 
 def FlaskAPP():
+    #session time
+    @app.before_request
+    def make_session_permanent():
+        session.permanent = True
+        try:
+            app.permanent_session_lifetime = datetime.timedelta(minutes=int(Config.read()['core']['session']))
+        except:
+            LOG.error(Console.SessionError.value)
+
+    @app.route('/update_permissions', methods=['POST'])
+    def update_permissions():
+        data = request.get_json()
+        user_id = data.get('user_id')
+        permissions = data.get('permissions')
+        SQL.Changepermission(user_id, permissions)
+        return "done"
+
     # API
     @app.route("/get_options", methods=["GET"])
     def get_options():
@@ -114,17 +131,20 @@ def FlaskAPP():
             if username == "" or password == "":
                 flash(Mess.EmptyFields.value, "alert-error")
             else:
-                if username not in accounts:
-                    flash(Mess.WrongPasswordOrEmail.value, "alert-error")
-                else:
-                    if not PassGenerate(username, password) == accounts[username]["password"]:
-                        flash(Mess.WrongPasswordOrEmail.value)
+                if CheckLetter(username) == True:
+                    if username not in accounts:
+                        flash(Mess.WrongPasswordOrEmail.value, "alert-error")
                     else:
-                        session['username'] = accounts[username]['username']
-                        session['id'] = accounts[username]['id']
-                        LOG.debug(Console.LoginSuccess.value.format(username=session["username"]))
-                        SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.LI.value, SaveLog.LogIn.value)
-                        return redirect(url_for('dir_listing'))
+                        if not PassGenerate(username, password) == accounts[username]["password"]:
+                            flash(Mess.WrongPasswordOrEmail.value)
+                        else:
+                            session['username'] = accounts[username]['username']
+                            session['id'] = accounts[username]['id']
+                            LOG.debug(Console.LoginSuccess.value.format(username=session["username"]))
+                            SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.LI.value, SaveLog.LogIn.value)
+                            return redirect(url_for('dir_listing'))
+                else:
+                    flash(Mess.Keyboard.value)
         else:
             if "username" in session:
                  return redirect(url_for('dir_listing'))
@@ -295,15 +315,15 @@ def FlaskAPP():
                 LOG.info(Console.UserSearch.value.format(username=session['username'], search=ForSearch))
                 if not file_search and not folder_Search:
                     flash(Mess.NotExist.value.format(search=ForSearch))
-                    return render_template('search.html', form=form)
+                    return render_template('search.html', form=form, perm=perm[accounts[session['username']]['id']])
                 else:
-                    return render_template('search.html', files=file_search, current_path=FileLocation, search=True, form=form, folders=folder_Search)
+                    return render_template('search.html', files=file_search, current_path=FileLocation, search=True, form=form, folders=folder_Search, perm=perm[accounts[session['username']]['id']])
         else:
             if "username" in session:
                 if int(perm[accounts[session['username']]['id']]['search']) == 0:
                     return render_template('message.html', titlemsg=Mess.Warningtitle.value, detailmsg=Mess.NotPerm.value, image='not')
                 else:
-                    return render_template('search.html', form=form)
+                    return render_template('search.html', form=form, perm=perm[accounts[session['username']]['id']])
             else:
                 return redirect(url_for('login'))
 
@@ -334,14 +354,17 @@ def FlaskAPP():
                 if username == "" or password == "" or repassword == "":
                     flash(Mess.EmptyFields.value)
                 else:
-                    if password != repassword:
-                        SQL.Register(username, PassGenerate(username, password))
-                        flash(Mess.RegisterSuccess.value)
-                        LOG.info(Console.RegisterSuccess.value.format(admin=session['username'], username=username))
-                        SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.UserRegister.value, username)
-                        return redirect(url_for('panel'))
+                    if CheckLetter(username) == True:
+                        if password == repassword:
+                            SQL.Register(username, PassGenerate(username, password))
+                            flash(Mess.RegisterSuccess.value)
+                            LOG.info(Console.RegisterSuccess.value.format(admin=session['username'], username=username))
+                            SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.UserRegister.value, username)
+                            return redirect(url_for('panel'))
+                        else:
+                            flash(Mess.PasswordNotMatch.value)
                     else:
-                        flash(Mess.PasswordNotMatch.value)
+                        flash(Mess.Keyboard.value)
             
         # Clear Log
         if form.clearlog.data == True:
@@ -387,15 +410,6 @@ def FlaskAPP():
         else:
             return redirect(url_for('login'))
     
-    #session time
-    @app.before_request
-    def make_session_permanent():
-        session.permanent = True
-        try:
-            app.permanent_session_lifetime = datetime.timedelta(minutes=int(Config.read()['core']['session']))
-        except:
-            LOG.error(Console.SessionError.value)
-
     # user logout
     @app.route("/logout")
     def logout():
@@ -406,11 +420,3 @@ def FlaskAPP():
             return redirect(url_for('login'))
         except:
             return redirect(url_for('login'))
-        
-    @app.route('/update_permissions', methods=['POST'])
-    def update_permissions():
-        data = request.get_json()
-        user_id = data.get('user_id')
-        permissions = data.get('permissions')
-        SQL.Changepermission(user_id, permissions)
-        return True

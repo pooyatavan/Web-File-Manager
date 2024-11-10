@@ -1,4 +1,4 @@
-import os, socket, time, sys, jdatetime
+import os, socket, time, sys, jdatetime, re
 from datetime import datetime
 
 def restart():
@@ -28,3 +28,6 @@ def RemoveIP():
 
 def RandomKey():
     return str(os.urandom(12).hex)
+
+def CheckLetter(username):
+    return bool(re.match(r'^[A-Za-z]+$', username))
