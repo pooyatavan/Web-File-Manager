@@ -35,6 +35,8 @@ class Mess(enum.Enum):
     FileNameEmpty = 'اسم فایل را انتخاب گنید'
     NotPerm = 'شما دسترس ی به این صفحه را ندارید'
     Keyboard = 'کیبور را به انگلیسی تغییر دهید'
+    WrongDateFormat = 'فرمت تاریخ اشتباه است'
+    EmptyDate = 'بازه تاریخ خالی است'
 
 class Console(enum.Enum):
     ServerRunning = 'Server is running on {ip}:{port}'
@@ -68,6 +70,7 @@ class Console(enum.Enum):
     ScanForThumbnail = 'System generate thumbnail for {counter} image fle'
     ErrorRenameFolder = 'Error while rename folder for user {username}'
     SessionError = "there is a problem in read session time"
+    SQLReconnect = 'Connection is lost, reconnecting...'
 
 class Objects(enum.Enum):
     Search = 'جستجو'
@@ -92,6 +95,8 @@ class Objects(enum.Enum):
     NewFolder = 'پوشه جدید'
     ChooseFile = 'انتخاب فایل'
     FilesName = 'اسم فایل'
+    StartDate = '1400-08-05'
+    EndDate = '1400-08-30'
 
 class SelectUser(enum.Enum):
     choose = 'انتخاب'

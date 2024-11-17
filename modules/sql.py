@@ -63,7 +63,13 @@ class sql():
     
     def AfterReadPerm(self):
         permlist = []
-        self.cursor.execute('SELECT * FROM perm')
+        try:
+            if not self.araax.is_connected():
+                LOG.warning(Console.SQLReconnect.value)
+                self.araax.reconnect()
+            self.cursor.execute('SELECT * FROM perm')
+        except mysql.connector.Error as err:
+            LOG.error(Console.ConnSQLError.value)
         for row in self.cursor:
             permlist.append({'id': row[0], 'delete': row[1], 'upload': row[2], 'newfolder': row[3], 'rename': row[4], 'log': row[5], 'admin': row[6], 'print': row[7], 'search': row[8]})
         return permlist

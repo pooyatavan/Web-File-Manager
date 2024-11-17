@@ -1,6 +1,7 @@
 import os, socket, time, sys, jdatetime, re
 from datetime import datetime
 
+
 def restart():
     python = sys.executable
     os.execl(python, python, * sys.argv)
@@ -31,3 +32,20 @@ def RandomKey():
 
 def CheckLetter(username):
     return bool(re.match(r'^[A-Za-z]+$', username))
+
+def extract_number(filename):
+    match = re.search(r'\((\d+)\)', filename)
+    return int(match.group(1)) if match else float('inf')
+
+def CheckDateFormat(date):
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+    except:
+        return False
+    
+def FLBD(logs, start_date, end_date):
+    dates = []
+    for log in logs:
+        if start_date <= log[1].split()[0].replace("-", "") <= end_date:
+            dates.append(log)
+    return dates

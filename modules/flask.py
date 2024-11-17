@@ -9,7 +9,7 @@ from modules.password import PassGenerate
 from modules.strings import Console,Mess, Objects, SaveLog
 from modules.log import LOG
 from modules.sql import SQL
-from modules.tools import restart, RandomKey, GetTime, RemoveIP, CheckLetter
+from modules.tools import restart, RandomKey, GetTime, RemoveIP, CheckLetter, extract_number, CheckDateFormat, FLBD
 from modules.image import compress_image
 from modules.config import Config
 
@@ -32,6 +32,8 @@ else:
 class SIL(FlaskForm):
     SU = SelectField(render_kw={"class": "form-select"}, choices=usernames)
     submit = SubmitField(label=Objects.Search.value, render_kw={'class': "btn"})
+    StartDate = StringField(render_kw={"placeholder": Objects.StartDate.value})
+    EndDate = StringField(render_kw={"placeholder": Objects.EndDate.value})
 
 class LoginForm(FlaskForm):
     username = StringField(render_kw={"placeholder": Objects.username.value, "class": "form-control", "id": "floatingInput", "type": "text"})
@@ -255,7 +257,7 @@ def FlaskAPP():
                     FS.append(data)
                 else:
                     FM.append(data)
-            return render_template('index.html',folders=FM, files=FS, current_path=req_path, form=form, perm=perm[accounts[session['username']]['id']])
+            return render_template('index.html',folders=FM, files=sorted(FS, key=extract_number), current_path=req_path, form=form, perm=perm[accounts[session['username']]['id']])
         else:
             return redirect(url_for('login'))
 
@@ -365,7 +367,6 @@ def FlaskAPP():
                             flash(Mess.PasswordNotMatch.value)
                     else:
                         flash(Mess.Keyboard.value)
-            
         # Clear Log
         if form.clearlog.data == True:
             LOG.clearlogfile(session['username'])
@@ -399,17 +400,28 @@ def FlaskAPP():
     def log():
         SLog = []
         form = SIL()
+        SDate = []
         if form.submit.data == True:
+            session.pop('_flashes', None)
             GetUser = form.SU.data
-            SLog = SQL.ReadLogs(GetUser)
+            start_date = form.StartDate.data
+            end_date = form.EndDate.data
+            if start_date == "" or end_date == "":
+                flash(Mess.EmptyDate.value)
+            else:
+                if CheckDateFormat(start_date) == False or CheckDateFormat(end_date) == False:
+                    flash(Mess.WrongDateFormat.value)
+                else:
+                    SLog = SQL.ReadLogs(GetUser)
+                    SDate = FLBD(SLog, start_date.replace("-", ""), end_date.replace("-", ""))
         if "username" in session:
             if int(perm[accounts[session['username']]['id']]['log']) == 0:
                 return render_template('message.html', titlemsg=Mess.Warningtitle.value, detailmsg=Mess.NotPerm.value, image="not")
             else:
-                return render_template('log.html', logs=SLog, form=form)
+                return render_template('log.html', logs=SDate, form=form)
         else:
             return redirect(url_for('login'))
-    
+
     # user logout
     @app.route("/logout")
     def logout():
