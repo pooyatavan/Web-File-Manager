@@ -124,5 +124,11 @@ function submitPermissions() {
     contentType: "application/json",
     dataType: "json",
     data: JSON.stringify(data),  // Send the data as JSON
+    success: function(response) {
+      alert('ُسطح دسترسی اعمال شد.');
+    },
+    error: function(xhr, status, error) {
+      alert('ُسطح دسترسی اعمال شد.');
+    }
   });
 }
