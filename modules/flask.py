@@ -242,21 +242,18 @@ def FlaskAPP():
                     except:
                         LOG.error(Console.ErrorRenameFolder.value.format(username=session['username']))
                     return redirect(url_for('login'))
-                    
-            # laod files and folders
+                
+            # sort files and folders
             abs_path = os.path.join(BASE_DIR, req_path)
             if not os.path.exists(abs_path):
                 return render_template('message.html', titlemsg=Mess.PageNotFoundTitle.value, detailmsg=Mess.PageNotFoundDetail.value, image="exist")
-            if os.path.isfile(abs_path):
-                return f'Serving file: {abs_path}'
-            # Get List of all data
-            dir_files = os.listdir(abs_path)
-            # Sort Data
-            for data in dir_files:
-                if "." in data:
-                    FS.append(data)
-                else:
-                    FM.append(data)
+            if os.path.isdir(abs_path):
+                for item in os.listdir(abs_path):
+                    item_path = os.path.join(abs_path, item)
+                    if os.path.isfile(item_path):
+                        FS.append(item)
+                    elif os.path.isdir(item_path):
+                        FM.append(item)
             return render_template('index.html',folders=FM, files=sorted(FS, key=extract_number), current_path=req_path, form=form, perm=perm[accounts[session['username']]['id']])
         else:
             return redirect(url_for('login'))
@@ -319,7 +316,7 @@ def FlaskAPP():
                     flash(Mess.NotExist.value.format(search=ForSearch))
                     return render_template('search.html', form=form, perm=perm[accounts[session['username']]['id']])
                 else:
-                    return render_template('search.html', files=file_search, current_path=FileLocation, search=True, form=form, folders=folder_Search, perm=perm[accounts[session['username']]['id']])
+                    return render_template('search.html', current_path=FileLocation, search=True, form=form, folders=sorted(folder_Search, key=extract_number), perm=perm[accounts[session['username']]['id']])
         else:
             if "username" in session:
                 if int(perm[accounts[session['username']]['id']]['search']) == 0:
