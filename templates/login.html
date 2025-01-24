@@ -2,13 +2,13 @@
 {% block content %}
     <form action="" method="POST" class="login-form">
 		<div class="logo_login"><img src="{{ url_for('style', filename='img/logo.png')}}"/></div>
-            <div class="login">
-                {{ form.hidden_tag() }}
-                {{ form.username() }}
-                {{ form.password() }}
-                {{ form.login() }}
-            </div>
-            {% with messages = get_flashed_messages(with_categories=true) %}
+        <div class="login">
+            {{ form.hidden_tag() }}
+            {{ form.username() }}
+            {{ form.password() }}
+            {{ form.login() }}
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
                     <div class="alert alert-info" role="alert">

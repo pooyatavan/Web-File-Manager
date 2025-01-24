@@ -39,23 +39,6 @@
                             </a>
                         </div>
                     {% endfor %}
-
-                    {% for file in files %}
-                        {% if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif')) %}
-                            <div id="print-area" class="img-container">
-                                <div class="gallery-item">
-                                    <img id="image-to-print-{{ loop.index }}" src="{{ 'dir/' + file }}" alt="{{ file }}" data-image="{{ 'dir/' + file }}" data-src="{{ 'dir/' + file }}" class="gallery-item gallery-item-image">
-                                </div>
-                                <div class="item-desc">
-                                    <a href="{{ 'dir/' + file }}">{{ file }}</a>
-                                </div>
-                                <div class="op">
-                                    <a class="download" href="{{ 'dir/' + file }}">دانلود</a>
-                                    <button style="margin: auto;" type="button" class="btn-print" onclick="printImage('image-to-print-{{ loop.index }}')">چاپ</button>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
                 </div>
             {% endif %}
         </div>

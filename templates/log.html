@@ -3,7 +3,18 @@
   <form action="" method="POST" class="search-log-form">
     {{ form.hidden_tag() }}
     {{ form.SU() }}
+    {{ form.StartDate() }}
+    {{ form.EndDate() }}
     {{ form.submit() }}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-info" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+  {% endwith %}
   </form>
   {% if not logs %}
     <div class="error">

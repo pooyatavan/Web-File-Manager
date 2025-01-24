@@ -5,9 +5,11 @@
         <script src="{{ url_for('style', filename='js/jquery.js')}}"></script>
         <script src="{{ url_for('style', filename='js/panel.js')}}"></script>
         <script src="{{ url_for('style', filename='js/admin.js')}}"></script>
+        <script src="{{ url_for('style', filename='js/disable.js')}}"></script>
+        <script src="{{ url_for('style', filename='js/delete.js')}}"></script>
         <title>آراکس</title>
     </head>
-    <body>
+    <body oncontextmenu="disableRightClick(event)">
         {% if "username" in session %}
             <div class="navigation">
                 <div class="right-side">

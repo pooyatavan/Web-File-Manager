@@ -108,17 +108,17 @@
                                     </div>
                                 {% endif %}
                                 {% if perm['delete'] | int >= 1 %}
-                                    <form class="form" action="{{ url_for('delete_file') }}" method="post">
-                                        <input type="hidden" name="path" value="{{ current_path }}">
-                                        <input type="hidden" name="file_name" value="{{ file }}">
-                                        <div class="op">
-                                            <button type="submit" class="btn-remove">حذف</button>
-                                            {% if perm['print'] | int >= 1 %}
-                                                <!-- Pass the unique image ID to the printImage function -->
-                                                <button type="button" class="btn-print" onclick="printImage('image-to-print-{{ loop.index }}')">چاپ</button>
-                                            {% endif %}
-                                        </div>
-                                    </form>
+                                <form class="form" action="{{ url_for('delete_file') }}" method="post" onsubmit="return confirmDeletion();">
+                                    <input type="hidden" name="path" value="{{ current_path }}">
+                                    <input type="hidden" name="file_name" value="{{ file }}">
+                                    <div class="op">
+                                        <button type="submit" class="btn-remove">حذف</button>
+                                        {% if perm['print'] | int >= 1 %}
+                                            <!-- Pass the unique image ID to the printImage function -->
+                                            <button type="button" class="btn-print" onclick="printImage('image-to-print-{{ loop.index }}')">چاپ</button>
+                                        {% endif %}
+                                    </div>
+                                </form>
                                 {% endif %}
                             </div>
                         {% endif %}

@@ -78,6 +78,16 @@
               </form>
             </div>
           </div>
+          <div class="tab">
+            <input type="radio" name="css-tabs" id="tab-7" class="tab-switch">
+            <label for="tab-7" class="tab-label">ساخت عکس</label>
+            <div class="tab-content">
+              <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                {{ form.makeit() }}
+              </form>
+            </div>
+          </div>
         {% endif %}
       </div>
     </div>
