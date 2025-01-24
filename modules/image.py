@@ -18,13 +18,17 @@ def compress_image(file_path, filename):
             with Image.open(file_path + "\\" + filename) as img:
                 img = img.resize((int(Config.read()['image']['width']), int(Config.read()['image']['height'])), Image.LANCZOS).convert('RGB')
                 img.save(file_path + "\\" + "thumb_" + filename, "JPEG", quality=int(Config.read()['image']['quality']))
-    except:
-        LOG.warning(Console.CompressError.value)
+    except Exception as error:
+        LOG.warning(Console.CompressError.value.format(error=error))
 
 def create_thumbnail(image_path, thumb_path, size=(int(Config.read()['image']['width']), int(Config.read()['image']['height']))):
-    with Image.open(image_path) as img:
-        img.thumbnail(size)
-        img.save(thumb_path)
+    try:
+        with Image.open(image_path) as img:
+            img.thumbnail(size)
+            img.save(thumb_path)
+            LOG.info(Console.ConvertThumbnailS.value.format(file=image_path))
+    except Exception as error:
+        LOG.error(Console.ConvertThumbnailE.value.format(file=error))
 
 def Scan():
     counter = 0

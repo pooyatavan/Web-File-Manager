@@ -5,12 +5,13 @@ from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 
+from modules.thread import thread
 from modules.password import PassGenerate
 from modules.strings import Console,Mess, Objects, SaveLog
 from modules.log import LOG
 from modules.sql import SQL
 from modules.tools import restart, RandomKey, GetTime, RemoveIP, CheckLetter, extract_number, CheckDateFormat, FLBD
-from modules.image import compress_image
+from modules.image import compress_image, Scan
 from modules.config import Config
 
 accounts = {}
@@ -78,6 +79,8 @@ class PanelForm(FlaskForm):
     oldpassword = StringField(render_kw={"placeholder": Objects.OldPass.value, "class": "form-control", "type": "password"})
     newpassword = StringField(render_kw={"placeholder": Objects.NewPass.value, "class": "form-control", "type": "password"})
     renewpassword = StringField(render_kw={"placeholder": Objects.ReNewPass.value, "class": "form-control", "type": "password"})
+    # Make thumbnail
+    makeit = SubmitField(render_kw={"class": "btn"}, label=Objects.MakeIt.value)
 
 def FlaskAPP():
     #session time
@@ -85,9 +88,9 @@ def FlaskAPP():
     def make_session_permanent():
         session.permanent = True
         try:
-            app.permanent_session_lifetime = datetime.timedelta(minutes=int(Config.read()['core']['session']))
-        except:
-            LOG.error(Console.SessionError.value)
+            app.permanent_session_lifetime = datetime.timedelta(minutes=60)
+        except Exception as e:
+            LOG.error(Console.SessionError.value.format(error=e))
 
     @app.route('/update_permissions', methods=['POST'])
     def update_permissions():
@@ -387,11 +390,17 @@ def FlaskAPP():
         if form.restartcore.data == True:
             SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.ReloadCore.value, "****")
             restart()
+
+        # Make thumbnails
+        if form.makeit.data == True:
+            thread(Scan())
+        
+        # Check sessions
         if "username" in session:
             return render_template('panel.html', form=form, perm=perm[accounts[session['username']]['id']])
         else:
             return redirect(url_for('login'))
-
+         
     # Log page
     @app.route('/log', methods=['GET', 'POST'])
     def log():

@@ -64,13 +64,16 @@ class Console(enum.Enum):
     UserDeleteFile = 'User {username} delete file: {file}'
     UserMakeFolder = 'User {username} make new folder: {name}'
     UsernameRenameFolder = 'User {username} rename folder from {old} to {new}'
-    CompressError = 'Error while convert photo'
+    CompressError = 'Error while convert photo: {error}'
     DirFolder = 'name "dir" folder not exist in root'
     NewFolderError = 'error while making a new folder for user {username}'
     ScanForThumbnail = 'System generate thumbnail for {counter} image fle'
     ErrorRenameFolder = 'Error while rename folder for user {username}'
-    SessionError = "there is a problem in read session time"
+    SessionError = "there is a problem in read session time: {error}"
     SQLReconnect = 'Connection is lost, reconnecting...'
+    ConvertThumbnailE = 'Error while converting this file: {file}'
+    ConvertThumbnailS = 'image Converted {file}'
+    MakeDirFolder = 'dir folder not exist and core make it'
 
 class Objects(enum.Enum):
     Search = 'جستجو'
@@ -97,6 +100,7 @@ class Objects(enum.Enum):
     FilesName = 'اسم فایل'
     StartDate = '1400-08-05'
     EndDate = '1400-08-30'
+    MakeIt = 'بساز'
 
 class SelectUser(enum.Enum):
     choose = 'انتخاب'
