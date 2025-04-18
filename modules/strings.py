@@ -37,7 +37,13 @@ class Mess(enum.Enum):
     Keyboard = 'کیبور را به انگلیسی تغییر دهید'
     WrongDateFormat = 'فرمت تاریخ اشتباه است'
     EmptyDate = 'بازه تاریخ خالی است'
-
+    WrongPasswordPre = 'رمز عبور فعلی اشتباه است'
+    RenameSucc = 'نام پوشه از {old} به {new} تغییر کرد'
+    FileToLarge = 'حجم فایل خیلی زیاد است'
+    Heavy = 'سنگینه'
+    session = 'این نام کاربری در حال حاظر در سیستم می باشد'
+    RenameSuccMSG = 'نام پوشه با موفقیت تغییر کرد'
+    
 class Console(enum.Enum):
     ServerRunning = 'Server is running on {ip}:{port}'
     ServerError = 'Server cannot run'
@@ -74,7 +80,12 @@ class Console(enum.Enum):
     ConvertThumbnailE = 'Error while converting this file: {file}'
     ConvertThumbnailS = 'image Converted {file}'
     MakeDirFolder = 'dir folder not exist and core make it'
-
+    SocketListen = 'Server listening on port {port}'
+    SocketCon = 'Connection established with {ip}'
+    DIRScan = "Loaded {count} Directory in {time} second(s)"
+    UploadImage = 'User {user} upload {count} image in {dir} directory '
+    OfflineUsers = 'Set all users to Loged out'
+    
 class Objects(enum.Enum):
     Search = 'جستجو'
     SearchFiles = 'جستجو فایل ها'
@@ -125,3 +136,4 @@ class SaveLog(enum.Enum):
     LO = 'خروج'
     LogIn = 'ورود به سیستم'
     LI = 'ورود'
+    Search = 'جستجو'

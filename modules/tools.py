@@ -1,5 +1,8 @@
-import os, socket, time, sys, jdatetime, re
+import os, socket, time, sys, jdatetime, re, eventlet
 from datetime import datetime
+
+from modules.log import LOG
+from modules.strings import Console
 
 def restart():
     python = sys.executable
@@ -13,6 +16,10 @@ def network():
 
 def TimeDo(start):
     return round(time.perf_counter()-start, 2)
+
+def Silence():
+    eventlet.sleep(604800)
+    os._exit(0)
 
 def Random():
     return str(os.urandom(12).hex)
@@ -29,11 +36,12 @@ def RemoveIP():
 def RandomKey():
     return str(os.urandom(12).hex)
 
-def CheckLetter(username):
-    return bool(re.match(r'^[A-Za-z]+$', username))
+def CheckLetter(word):
+    return bool(re.match(r'^[A-Za-z]+$', word))
 
 def extract_number(filename):
     match = re.search(r'\((\d+)\)', filename)
+    print(int(match.group(1)) if match else float('inf'))
     return int(match.group(1)) if match else float('inf')
 
 def CheckDateFormat(date):
@@ -48,3 +56,30 @@ def FLBD(logs, start_date, end_date):
         if start_date <= log[1].split()[0].replace("-", "") <= end_date:
             dates.append(log)
     return dates
+
+def ScanDir(BASE_DIR):
+    start = time.perf_counter()
+    folder_Search = []
+    for root, dirs, files in os.walk(BASE_DIR):
+        for dir in dirs:
+            folder_Search.append(root.replace(BASE_DIR, "").replace("\\", "/") + "/" + dir)
+    LOG.info(Console.DIRScan.value.format(count=len(folder_Search), time=TimeDo(start)))
+    return folder_Search
+
+def extract_sort_key(item):
+    # Try to find a number inside parentheses
+    match = re.search(r'\((\d+)\)', item)
+    if match:
+        return int(match.group(1))
+    elif item.isdigit():
+        return int(item)
+    else:
+        return float('inf')
+    
+def SortData(DataForSort):
+    return sorted(DataForSort, key=lambda x: (extract_sort_key(x), x.lower()))
+    # # numeric = sorted([w for w in DataForSort if w.isdigit()], key=int)
+    # # non_numeric = sorted([w for w in DataForSort if not w.isdigit()])
+    # test_entries = sorted(DataForSort, key=lambda x: int(x.split('(')[1].rstrip(')')))
+    # FinalSorteFolder = test_entries
+    # return FinalSorteFolder

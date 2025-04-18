@@ -34,11 +34,24 @@ def Scan():
     counter = 0
     for root, dirs, files in os.walk(BASE_DIR):
         for file_name in files:
+            # Skip files that start with "thumb_"
             if "thumb_" not in file_name:
+                # Check if the file is an image
                 if file_name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff')):
+                    # Check for dots in the filename (except extension)
+                    name, ext = os.path.splitext(file_name)
+                    if '.' in name:
+                        # Rename the file by replacing dots with dashes
+                        new_name = name.replace('.', '-') + ext
+                        old_file_path = os.path.join(root, file_name)
+                        new_file_path = os.path.join(root, new_name)
+                        os.rename(old_file_path, new_file_path)
+                        file_name = new_name  # Update the file_name to the new name
+                    # Create the thumbnail path
                     image_path = os.path.join(root, file_name)
                     thumb_path = os.path.join(root, os.path.splitext('thumb_' + file_name)[0] + os.path.splitext(file_name)[1])
+                    # Create thumbnail if it doesn't exist
                     if not os.path.exists(thumb_path):
-                        counter = counter + 1
-                        create_thumbnail(image_path, thumb_path)      
+                        counter += 1
+                        create_thumbnail(image_path, thumb_path)
     LOG.info(Console.ScanForThumbnail.value.format(counter=counter))

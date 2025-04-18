@@ -20,19 +20,33 @@ class sql():
             self.cursor = self.araax.cursor()
             if self.araax.is_connected():
                 LOG.info(Console.ConnSQLSuccess.value.format(ip=network()))
+            else:
+                self.araax.reconnect()
         except:
             LOG.error(Console.ConnSQLError.value.format(ip=network()))
             sys.exit(1)
+    
+    def MakeOffline(self):
+        self.araax.reconnect()
+        self.cursor.execute(f"UPDATE users SET logedin = '0'")
+        self.araax.commit()
+        LOG.info(Console.OfflineUsers.value)
     
     def ReadAccounts(self):
         start = time.perf_counter()
         self.cursor.execute('SELECT * FROM users')
         for row in self.cursor:
-            accounts[row[1]] = {'id': row[0], 'username': row[1], 'password': row[2]}
-            usernames.append((row[1], row[1]))
+            accounts[row[1]] = {'id': row[0], 'username': row[1], 'password': row[2], "logedin": row[3]}
         LOG.info(Console.Load.value.format(number=len(accounts), table="users", time=TimeDo(start)))
-        return accounts, usernames
+        return accounts
     
+    def ReadUsernames(self):
+        usernames = []
+        self.cursor.execute('SELECT * FROM users')
+        for row in self.cursor:
+            usernames.append((row[1], row[1]))
+        return usernames
+
     def Readpermusers(self):
         permusers = []
         self.cursor.execute('SELECT * FROM users')
@@ -84,9 +98,9 @@ class sql():
     def Register(self, username, password):
         RegID = self.SearchSQL()
         self.araax.reconnect()
-        self.cursor.execute("INSERT INTO users (id, username, password) VALUES (%s, %s, %s)", (RegID, username, password))
+        self.cursor.execute("INSERT INTO users (id, username, password, logedin) VALUES (%s, %s, %s, %s)", (RegID, username, password, 0))
         self.araax.commit()
-        accounts[username] = {'id': RegID, 'username': username, 'password': password}
+        accounts[username] = {'id': RegID, 'username': username, 'password': password, 'logedin': 0}
         usernames.append(username)
         self.InsertPerm(RegID)
 
@@ -128,5 +142,10 @@ class sql():
         self.cursor.execute(Delete_all_rows)
         self.araax.commit()
         return logs == []
+
+    def UpdateUserOnline(self, username, online):
+        self.araax.reconnect()
+        self.cursor.execute(f"UPDATE users SET logedin = '{online}' WHERE username = '{username}'")
+        self.araax.commit()
 
 SQL = sql()
