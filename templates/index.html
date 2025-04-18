@@ -1,5 +1,15 @@
 {% extends "layout.html" %}
 {% block content %}
+    <!-- Flash messages for feedback -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert" role="alert" id="alert-box">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
     <div class="control">
         <!-- open modal -->
         <div id="demo-modal" class="modal">
@@ -13,7 +23,7 @@
                 <a href="#" class="modal__close">&times;</a>
             </div>
         </div>
-        <div class="control-right">
+        <div class="control-right form-top">
             {% if perm['upload'] | int >= 1 %}
             <form action="" method="post" enctype="multipart/form-data" class="form">
                 {{ form.hidden_tag() }}
@@ -22,6 +32,8 @@
                 {{ form.image(size=32) }}
                 {{ form.upload() }}
             </form>
+            {% endif %}
+            {% if perm['newfolder'] | int >= 1 %}
             <form class="form" action="" method="POST">
                 {{ form.hidden_tag() }}
                 {{ form.newfoldername() }}
@@ -29,9 +41,9 @@
             </form>
             {% endif %}
         </div>
-        <div class="control-left">
+        <div class="control-left form-top">
             <form class="form">
-                <a href="javascript: history.go(-1)" class="btn-back">برگشت</a>
+                <a href="/" class="btn-back">برگشت</a>
                 <h5>{{ current_path }}</h5>
                 {% if perm['rename'] | int >= 1 %}
                     <a href="#demo-modal" class="btn">تغییر نام پوشه</a>
@@ -39,18 +51,10 @@
             </form>
         </div>
     </div>
+    <div class="border"></div>
+    <div class="border-blur"></div>
     <!-- File and folder listing -->
     <div class="container-explor">
-        <!-- Flash messages for feedback -->
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="alert" role="alert">
-                    {% for message in messages %}
-                        {{ message }}
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
         <!-- Files and folder -->
         <div class="list-group" dir="ltr">
             {% if not folders and not files %}
@@ -68,7 +72,7 @@
                                 <div class="images-cont">{{ folder }}</div>
                             </a>
                             {% if perm['delete'] | int >= 1 %}
-                                <form class="form" action="{{ url_for('delete_file') }}" method="post">
+                                <form class="form" action="{{ url_for('delete_file') }}" method="post" onsubmit="return confirmDeletion();">
                                     <input type="hidden" name="path" value="{{ current_path }}">
                                     <input type="hidden" name="file_name" value="{{ folder }}">
                                     <button type="submit" class="btn-remove">حذف</button>
@@ -97,29 +101,25 @@
                                 {% else %}
                                     <div class="gallery-item">
                                         <!-- Assign a unique ID to each image using the loop index -->
-                                        <img id="image-to-print-{{ loop.index }}" 
-                                            src="{{ url_for('static', filename='' ~ current_path ~ '/' ~ 'thumb_' + file) }}" 
-                                            data-image="{{ url_for('static', filename='' ~ current_path ~ '/' ~ file) }}" 
-                                            alt="{{ file }}" 
-                                            class="gallery-item gallery-item-image"/>
+                                        <img id="image-to-print-{{ loop.index }}" src="{{ url_for('static', filename='' ~ current_path ~ '/' ~ 'thumb_' + file) }}" data-image="{{ url_for('static', filename='' ~ current_path ~ '/' ~ file) }}" alt="{{ file }}" class="gallery-item gallery-item-image"/>
                                     </div>
                                     <div class="item-desc">
                                         <a href="{{ url_for('static', filename='' ~ current_path ~ '/' ~ file) }}">{{ file }}</a>
                                     </div>
-                                {% endif %}
-                                {% if perm['delete'] | int >= 1 %}
+                                {% endif %} 
                                 <form class="form" action="{{ url_for('delete_file') }}" method="post" onsubmit="return confirmDeletion();">
                                     <input type="hidden" name="path" value="{{ current_path }}">
                                     <input type="hidden" name="file_name" value="{{ file }}">
                                     <div class="op">
-                                        <button type="submit" class="btn-remove">حذف</button>
+                                        {% if perm['delete'] | int >= 1 %}
+                                            <button type="submit" class="btn-remove">حذف</button>
+                                        {% endif %}
                                         {% if perm['print'] | int >= 1 %}
                                             <!-- Pass the unique image ID to the printImage function -->
                                             <button type="button" class="btn-print" onclick="printImage('image-to-print-{{ loop.index }}')">چاپ</button>
                                         {% endif %}
                                     </div>
                                 </form>
-                                {% endif %}
                             </div>
                         {% endif %}
                     {% endfor %}
@@ -134,7 +134,8 @@
         <a class="next">&#10094;</a>
         <a class="prev">&#10095;</a>
     </div>
-
+    <a onclick="topFunction()" id="myBtn" title="Go to top">▲</a>
     <script src="{{ url_for('style', filename='js/gallery.js')}}"></script>
     <script src="{{ url_for('style', filename='js/print.js')}}"></script>
+    <script src="{{ url_for('style', filename='js/top.js')}}"></script>
 {% endblock content %}

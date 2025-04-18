@@ -1,16 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
-  <div class="panel">
-    <!-- Flash messages for feedback -->
-    {% with messages = get_flashed_messages() %}
+  <div class="empty-space" style="height: 10px;"></div>
+  <!-- Flash messages for feedback -->
+  {% with messages = get_flashed_messages() %}
     {% if messages %}
-      <div class="alert alert-info" role="alert">
+      <div class="alert alert-info" role="alert" id="alert-box">
         {% for message in messages %}
             {{ message }}
         {% endfor %}
       </div>
     {% endif %}
-    {% endwith %}
+  {% endwith %}
+  <div class="panel">
     <div class="wrapper">
       <div class="tabs">
         <div class="tab">
@@ -74,6 +75,7 @@
             <div class="tab-content">
               <form action="" method="POST">
                 {{ form.hidden_tag() }}
+                {{ form.selectuserdelete() }}
                 {{ form.deleteusername() }}
               </form>
             </div>

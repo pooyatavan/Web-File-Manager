@@ -1,26 +1,32 @@
 {% extends "layout.html" %}
 {% block content %}
-  <form action="" method="POST" class="search-log-form">
-    {{ form.hidden_tag() }}
-    {{ form.SU() }}
-    {{ form.StartDate() }}
-    {{ form.EndDate() }}
-    {{ form.submit() }}
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-            <div class="alert alert-info" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
-  {% endwith %}
-  </form>
+  <div class="control">
+    <form action="" method="POST" class="search-log-form">
+      {{ form.hidden_tag() }}
+      {{ form.SU() }}
+      {{ form.StartDate() }}
+      {{ form.EndDate() }}
+      {{ form.submit() }}
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert" role="alert" id="alert-box">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </form>
+  </div>
+  <div class="border"></div>
+  <div class="border-blur"></div>
   {% if not logs %}
-    <div class="error">
+  <div class="container-explor">
+    <div class="empty">
       <img src="{{ url_for('style', filename='img/log.png')}}"><br>
       <a>لاگی موجود نمی باشد</a>
     </div>
+  </div>
   {% else %}
     <table id="log">
       <tr>

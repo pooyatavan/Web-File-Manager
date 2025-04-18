@@ -11,7 +11,7 @@
             <!-- Flash messages for feedback -->
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
-                    <div class="alert" role="alert">
+                    <div class="alert" role="alert" id="alert-box">
                         {% for message in messages %}
                             {{ message }}
                         {% endfor %}
@@ -20,9 +20,11 @@
             {% endwith %}
         </div>
     </div>
+    <div class="border"></div>
+    <div class="border-blur"></div>
     <!-- File and folder listing -->
     <div class="container-explor">
-        <div class="list-group" dir="ltr">
+        <div dir="ltr">
             <!-- if list is empty -->
             {% if not files and not folders %}
                 <div class="empty">
