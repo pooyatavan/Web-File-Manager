@@ -75,4 +75,15 @@ document.addEventListener('DOMContentLoaded', function() {
     prev.onclick = function() {
         showImage(currentImageIndex - 1);
     };
+
+    // Keyboard navigation for next/previous image (left and right arrow keys)
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "ArrowRight") {
+            // Right arrow - Next image
+            showImage(currentImageIndex + 1);
+        } else if (event.key === "ArrowLeft") {
+            // Left arrow - Previous image
+            showImage(currentImageIndex - 1);
+        }
+    });
 });

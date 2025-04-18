@@ -1,8 +1,20 @@
 function printImage(imageId) {
     // Get the image element using the unique image ID passed as a parameter
-    const imageSrc = document.getElementById(imageId).src;
+    const imageElement = document.getElementById(imageId);
 
-    // Open a new window
+    // Get the full-size image URL from the data-image attribute
+    const mainImageSrc = imageElement.getAttribute('data-image');
+    
+    // Debugging: Check if the mainImageSrc is valid
+    if (!mainImageSrc) {
+        alert("Main image source is invalid.");
+        return;
+    }
+
+    // Debugging: Log the main image source to the console
+    console.log("Main Image URL:", mainImageSrc);
+
+    // Open a new window for printing
     const printWindow = window.open('', '_blank', 'width=800,height=600');
 
     // Write the HTML and CSS for the print window
@@ -20,24 +32,37 @@ function printImage(imageId) {
                             height: 100vh;
                         }
                         img {
-                            width: 100%;
-                            height: 100%;
+                            max-width: 90%;
+                            max-height: 90%;
                             object-fit: contain;
                         }
                     }
                 </style>
             </head>
             <body>
-                <img src="${imageSrc}" style="width: 100%; height: 100%; object-fit: contain;" />
+                <img id="print-image" src="${mainImageSrc}" alt="Image to Print" style="display:none;" />
+                <script>
+                    // Wait for the image to load before printing
+                    const img = document.getElementById('print-image');
+                    img.onload = function() {
+                        // Image is fully loaded, now display and trigger the print dialog
+                        img.style.display = 'block'; // Make the image visible
+                        window.print();
+                    }
+                    img.onerror = function() {
+                        alert("Failed to load the image for printing.");
+                    }
+                </script>
             </body>
         </html>
     `);
 
-    // Wait for the new window to finish loading, then trigger the print
-    printWindow.document.close(); // Close the document stream to indicate that the writing is complete
+    // Close the document stream to indicate that the writing is complete
+    printWindow.document.close(); 
     printWindow.focus(); // Ensure the window is focused
-    printWindow.print(); // Trigger the print dialog
+
+    // Close the print window after printing is done
     printWindow.onafterprint = function () {
-        printWindow.close(); // Close the print window after printing
+        printWindow.close(); // Close the print window
     };
 }
