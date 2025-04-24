@@ -1,26 +1,23 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, send_from_directory, Blueprint, jsonify
-import datetime, os, re, shutil
+import os, re, shutil
 from wtforms import StringField, SubmitField, SelectField
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 
-from modules.thread import thread
 from modules.password import PassGenerate
 from modules.strings import Console,Mess, Objects, SaveLog
 from modules.log import LOG
 from modules.sql import SQL
-from modules.tools import restart, RandomKey, GetTime, RemoveIP, CheckLetter, extract_number, CheckDateFormat, FLBD, GetRootProject, ScanDir, SortData
+from modules.tools import restart, RandomKey, GetTime, RemoveIP, CheckLetter, extract_number, CheckDateFormat, FLBD, GetRootProject, ScanDir, SortData, thread, SlashRemover
 from modules.image import Scan,compress_image
 from modules.config import Config
 
 accounts = {}
-usernames = []
 perm = {}
 ScanDirs = []
 SQL.MakeOffline()
 accounts = SQL.ReadAccounts()
-usernames = SQL.ReadUsernames()
 perm = SQL.ReadPerm()
 pattern = re.compile(r"\((\d+)\)")
 app = Flask(__name__, template_folder='../templates', static_folder='../dir')
@@ -46,11 +43,11 @@ class LoginForm(FlaskForm):
     username = StringField(render_kw={"placeholder": Objects.username.value, "class": "form-control", "id": "floatingInput", "type": "text"})
     password = StringField(render_kw={"placeholder": Objects.password.value, "class": "form-control","id": "floatingInput", "type": "password"})
     code = StringField(render_kw={"placeholder": "Code", "class": "captchatextbox", "autocomplete": "off", "inputmode": "numeric", "maxlength": "4"})
-    login = SubmitField(label=Objects.login.value, render_kw={"class": "btn btn-primary w-100 py-2"})
+    login = SubmitField(label=Objects.login.value, render_kw={"class": "btn blue"})
 
 class SearchForm(FlaskForm):
     searchtxt = StringField(render_kw={"placeHolder": Objects.SearchFiles.value, "class": "", "type": "text", "style": "text-align: left; font-family: tahoma;"})
-    searchbtn = SubmitField(render_kw={"value": f"{Objects.Search.value}", "class": "btn"})
+    searchbtn = SubmitField(render_kw={"value": f"{Objects.Search.value}", "class": "btn blue"})
 
 class dir(FlaskForm):
     # upluad files
@@ -63,6 +60,8 @@ class dir(FlaskForm):
     # make new folder
     newfoldername = StringField(render_kw={"placeholder": Objects.FolderName.value, "class": "form-control"})
     submitnewfoldername = SubmitField(label=Objects.NewFolder.value, render_kw={"class": "btn", "style": "float: right"})
+    # back btn
+    backbtn = SubmitField(SubmitField(label=Objects.Back.value, render_kw={"class": "btn-back"}))
 
 class PanelForm(FlaskForm):
     # register user
@@ -89,14 +88,14 @@ class PanelForm(FlaskForm):
     makeit = SubmitField(render_kw={"class": "btn"}, label=Objects.MakeIt.value)
 
 def FlaskAPP():
-    #session time
+    # session time
     @app.before_request
     def make_session_permanent():
         session.permanent = True
-        try:
-            app.permanent_session_lifetime = datetime.timedelta(minutes=60)
-        except Exception as e:
-            LOG.error(Console.SessionError.value.format(error=e))
+    #     try:
+    #         #app.permanent_session_lifetime = datetime.timedelta(minutes=60)
+    #     except Exception as e:
+    #         LOG.error(Console.SessionError.value.format(error=e))
 
     @app.route('/update_permissions', methods=['POST'])
     def update_permissions():
@@ -224,10 +223,13 @@ def FlaskAPP():
                     flash(Mess.EmptyFolder.value)
                 else:
                     FullDestination = BASE_DIR + "\\" + URLREQ + "\\" + newfoldername
-                    ScanDirs.append(URLREQ + "\\" + newfoldername)
                     if os.path.exists(FullDestination) == False:
                         try:
                             os.makedirs(FullDestination, exist_ok=True)
+                            if not URLREQ:
+                                ScanDirs.append(SlashRemover(URLREQ + "\\" + newfoldername))
+                            else:
+                                ScanDirs.append(SlashRemover("\\" + URLREQ + "\\" + newfoldername))
                             flash(Mess.FolderSucc.value)
                             LOG.info(Console.UserMakeFolder.value.format(username=session['username'], name=newfoldername))
                             SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.MakeNewFolder.value, newfoldername)
@@ -242,7 +244,6 @@ def FlaskAPP():
                     flash(Mess.NotinDir.value)
                     return redirect(url_for('login'))
                 else:
-                    oldname = ""
                     Newname = form.getname.data
                     ReqDir = "/" + req_path
                     SelectFolder = req_path.split('/')[-1]
@@ -257,21 +258,14 @@ def FlaskAPP():
                             os.rename(FullOldDir, FullNewDir)
                             ScanDirs[GetTargetIndex] = "/" + req_path.replace(SelectFolder, Newname)
                             FullNewDir.replace(BASE_DIR, "").replace("/","\\")
+                            LOG.info(Console.UsernameRenameFolder.value.format(username=session['username'], old=SelectFolder, new=Newname))
+                            SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.RenameFolder.value, SaveLog.RenameFolderDetail.value.format(old=SelectFolder, new=Newname))
                             flash(Mess.RenameSuccMSG.value)
                             return redirect(url_for('login'))
-                        
+            # back btn
+            if form.backbtn.data == True:
+                print(req_path)
 
-                    #     if os.path.exists(FD[1]) == False:
-                    #         #os.rename(FD[0], FD[1])
-                    #         flash(Mess.RenameSucc.value.format(new=Newname, old=oldname))
-                    #         LOG.info(Console.UsernameRenameFolder.value.format(username=session['username'], old=oldname, new=Newname))
-                    #         SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.RenameFolder.value, SaveLog.RenameFolderDetail.value.format(old=oldname, new=Newname))
-                    #     else:
-                    #         flash(Mess.FolderExist.value)
-                    # except:
-                    #     LOG.error(Console.ErrorRenameFolder.value.format(username=session['username']))
-                    # return redirect(url_for('login'))
-                
             # sort files and folders
             abs_path = os.path.join(BASE_DIR, req_path)
             if not os.path.exists(abs_path):
@@ -305,9 +299,9 @@ def FlaskAPP():
                     SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.DeleteFile.value, file_name)
                     flash(Mess.DeleteFile.value)
                 elif os.path.isdir(abs_path):
-                    ScanDirs.remove(abs_path.replace(GetRootProject() + "\\" + "dir", "").replace("\\", "/"))
+                    ScanDirs.remove(SlashRemover(abs_path.replace(GetRootProject() + "\\" + "dir", "")))
                     shutil.rmtree(abs_path)
-                    LOG.info(Console.UserDeleteFolder.value.format(username=session['username'], folder=req_path))
+                    LOG.info(Console.UserDeleteFolder.value.format(username=session['username'], root=abs_path))
                     SQL.InsertLog(len(SQL.ReadLogs(username="1")) + 1, GetTime(), session['username'], SaveLog.DeleteFolder.value, req_path)
                     flash(Mess.DeleteFolder.value)
             except Exception as e:
@@ -369,6 +363,7 @@ def FlaskAPP():
                     flash(Mess.ChangepasswordSuccess.value)
                 else:
                     flash(Mess.WrongPasswordPre.value)
+
         # User Register
         if form.register.data == True:
             username = form.username.data
@@ -419,7 +414,7 @@ def FlaskAPP():
 
         # Make thumbnails
         if form.makeit.data == True:
-            thread(Scan())
+            thread(Scan)
         
         # Check sessions
         if "username" in session:

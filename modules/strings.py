@@ -66,7 +66,7 @@ class Console(enum.Enum):
     DelF = 'User {username} delete FOF {FOF} from {from}'
     DelUsername = 'User {admin} delete {username}'
     UserSearch = 'User {username} search for word: {search}'
-    UserDeleteFolder = 'User {username} delete folder: {folder}'
+    UserDeleteFolder = 'User {username} delete this root: {root}'
     UserDeleteFile = 'User {username} delete file: {file}'
     UserMakeFolder = 'User {username} make new folder: {name}'
     UsernameRenameFolder = 'User {username} rename folder from {old} to {new}'
@@ -112,6 +112,7 @@ class Objects(enum.Enum):
     StartDate = '1400-08-05'
     EndDate = '1400-08-30'
     MakeIt = 'بساز'
+    Back = 'برگشت'
 
 class SelectUser(enum.Enum):
     choose = 'انتخاب'

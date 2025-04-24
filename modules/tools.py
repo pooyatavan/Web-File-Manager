@@ -1,12 +1,19 @@
-import os, socket, time, sys, jdatetime, re, eventlet
+import os, socket, time, sys, jdatetime, re, eventlet, threading
 from datetime import datetime
 
 from modules.log import LOG
 from modules.strings import Console
 
+def thread(target):
+    threading.Thread(target=target, daemon=True).start()
+    
 def restart():
     python = sys.executable
     os.execl(python, python, * sys.argv)
+
+def Silence():
+    eventlet.sleep(604800)
+    os._exit(0)
 
 def GetDirServer():
     return os.path.split(os.path.abspath(__file__))
@@ -16,10 +23,6 @@ def network():
 
 def TimeDo(start):
     return round(time.perf_counter()-start, 2)
-
-def Silence():
-    eventlet.sleep(604800)
-    os._exit(0)
 
 def Random():
     return str(os.urandom(12).hex)
@@ -37,11 +40,10 @@ def RandomKey():
     return str(os.urandom(12).hex)
 
 def CheckLetter(word):
-    return bool(re.match(r'^[A-Za-z]+$', word))
+    return bool(re.match(r'^[A-Za-z0-9.-]+$', word))
 
 def extract_number(filename):
     match = re.search(r'\((\d+)\)', filename)
-    print(int(match.group(1)) if match else float('inf'))
     return int(match.group(1)) if match else float('inf')
 
 def CheckDateFormat(date):
@@ -83,3 +85,6 @@ def SortData(DataForSort):
     # test_entries = sorted(DataForSort, key=lambda x: int(x.split('(')[1].rstrip(')')))
     # FinalSorteFolder = test_entries
     # return FinalSorteFolder
+
+def SlashRemover(Remover):
+    return Remover.replace("\\", "/")
